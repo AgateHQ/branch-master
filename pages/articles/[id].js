@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import styles from "../../styles/Home.module.css";
+import styles from "../../styles/Article.module.css";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -24,8 +24,9 @@ function Article() {
 
   return (
     <>
-      <main>
+      <main className={styles.main}>
         <Link href="/">Go Back</Link>
+
         <article className="premium">
           <h1>Hello from post number {router.query.id}!</h1>
           <MyImage />
@@ -60,22 +61,8 @@ function Article() {
           </section>
         </article>
         <div className="axate-notice"></div>
+
       </main>
-      <style jsx>{`
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          
-        }
-        section{
-          margin: 0 auto;
-          max-width: 640px;
-        }
-      `}</style>
     </>
   );
 }

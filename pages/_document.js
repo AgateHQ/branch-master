@@ -5,7 +5,7 @@ export default function Document() {
     <Html>
       <Head />
 
-      <body className="bg-white text-black antialiased dark:bg-gray-900 dark:text-white">
+      <body className="bg-white">
         <div
           id="axate-wallet"
           data-selector-premium-content=".premium"
