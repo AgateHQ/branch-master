@@ -1,0 +1,42 @@
+name: Create and Sync Branches
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  create-and-sync-branches:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Create Branches
+      run: |
+        git branch mad
+        git branch rad
+        git branch sad
+
+    - name: Push Branches
+      uses: ad-m/github-push-action@master
+      with:
+        branch: |
+          mad
+          rad
+          sad
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Sync Branches with Master
+      run: |
+        git fetch origin
+        git checkout mad
+        git merge origin/main --no-edit
+        git push origin mad
+        
+        git checkout rad
+        git merge origin/main --no-edit
+        git push origin rad
+        
+        git checkout sad
+        git merge origin/main --no-edit
+        git push origin sad
