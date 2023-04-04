@@ -13,18 +13,9 @@ jobs:
         run: |
           git branch mad
           git branch rad
-      - name: Push Branches
-        uses: ad-m/github-push-action@master
-        with:
-          branch: |
-            mad
-            rad
-          github_token: '${{ secrets.GITHUB_TOKEN }}'
       - name: Sync Branches with Master
         run: |
           git fetch origin
-          git branch -D mad
-          git branch -D rad
           git checkout mad
           git merge origin/main --no-edit
           git push origin mad
