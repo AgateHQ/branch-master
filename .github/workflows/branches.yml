@@ -25,6 +25,8 @@ jobs:
       - name: Sync Branches with Master
         run: |
           git fetch origin
+          git branch -D mad
+          git branch -D rad
           git checkout mad
           git merge origin/main --no-edit
           git push origin mad
