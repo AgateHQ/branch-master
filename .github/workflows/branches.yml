@@ -11,8 +11,6 @@ jobs:
         uses: actions/checkout@v2
       - name: Create Branches
         run: |
-          git branch -D mad
-          git branch -D rad
           git branch mad
           git branch rad
       - name: Push Branches
