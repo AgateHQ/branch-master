@@ -11,7 +11,6 @@ export default function Home() {
 
       <main>
         <h1 className={styles.title}>Welcome to Branch Master</h1>
-        <h2>Publication ID: XXX</h2>
         <div className="premium">
           <div className={styles.grid}>
             {Array.from({ length: 10 }, (_, index) => (
@@ -33,6 +32,7 @@ export default function Home() {
           justify-content: center;
           align-items: center;
         }
+        h1{color: #0070f3;}
         code {
           background: #fafafa;
           border-radius: 5px;
