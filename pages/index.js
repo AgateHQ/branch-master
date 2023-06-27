@@ -1,7 +1,10 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
+import { useState } from 'react';
+import SelectEnviroment from "./components/SelectEnviroment";
 
 export default function Home() {
+
   return (
     <div className={styles.container}>
       <Head>
@@ -11,6 +14,9 @@ export default function Home() {
 
       <main>
         <h1 className={styles.title}>Welcome to Branch Master</h1>
+
+        <SelectEnviroment/>
+
         <p>
           Current Version: {process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_MESSAGE}
         </p>
