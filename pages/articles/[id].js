@@ -14,7 +14,7 @@ function Article() {
     return (
       <Image
         loader={myLoader}
-        src="ai.png"
+        src="ai2.png"
         alt="Picture of something"
         width={500}
         height={500}

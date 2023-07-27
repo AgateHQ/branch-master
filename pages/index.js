@@ -13,7 +13,7 @@ export default function Home() {
       </Head>
 
       <main>
-        <h1 className={styles.title}>Welcome to Branch Master</h1>
+        <h1 className={styles.title}>Branch Master</h1>
 
         <SelectEnviroment/>
 
