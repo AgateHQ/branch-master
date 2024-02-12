@@ -17,11 +17,9 @@ kwr
 yrk
 mohm
 bcc
-cricketer
 pop
 mag
 bxn
 gjw
 brw
 rtw
-rcnnpm 
