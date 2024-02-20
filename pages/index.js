@@ -2,6 +2,7 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import { useState } from 'react';
 import SelectEnviroment from "./components/SelectEnviroment";
+import { Grid, Skeleton, Container } from '@mantine/core';
 
 export default function Home() {
 
@@ -32,6 +33,9 @@ export default function Home() {
         </div>
       </main>
 
+      const child = <Skeleton height={140} radius="md" animate={false} />;
+
+
       <style jsx>{`
         main {
           padding: 5rem 0;
@@ -56,3 +60,7 @@ export default function Home() {
     </div>
   );
 }
+
+
+
+

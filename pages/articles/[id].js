@@ -1,23 +1,21 @@
 import { useRouter } from "next/router";
 import styles from "../../styles/Article.module.css";
 import Link from "next/link";
-import Image from "next/image";
+import { Text, Paper, Title, Image } from "@mantine/core";
 
 function Article() {
   const router = useRouter();
 
-  const myLoader = ({ src, width, quality }) => {
-    return `/${src}?w=${width}&q=${quality || 75}`;
-  };
+  const imageURL = "https://source.unsplash.com/random/600×400";
 
   const MyImage = (props) => {
     return (
       <Image
-        loader={myLoader}
-        src="ai.png"
-        alt="Picture of something"
-        width={500}
-        height={500}
+        src={imageURL}
+        radius="md"
+        w={600}
+        h={400}
+        fit="contain"
       />
     );
   };
@@ -28,10 +26,10 @@ function Article() {
         <Link href="/">Go Back</Link>
 
         <article className="premium">
-          <h1>Hello from post number {router.query.id}!</h1>
+          <Title order={3} size="h1">Hello from post number {router.query.id}!</Title>
           <MyImage />
-          <section>
-            <p>
+          <Paper shadow="xs" p="xl">
+            <Text>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
               enim ad minim veniam, quis nostrud exercitation ullamco laboris
@@ -39,8 +37,8 @@ function Article() {
               reprehenderit in voluptate velit esse cillum dolore eu fugiat
               nulla pariatur. Excepteur sint occaecat cupidatat non proident,
               sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-            <p>
+            </Text>
+            <Text>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
               enim ad minim veniam, quis nostrud exercitation ullamco laboris
@@ -48,8 +46,8 @@ function Article() {
               reprehenderit in voluptate velit esse cillum dolore eu fugiat
               nulla pariatur. Excepteur sint occaecat cupidatat non proident,
               sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-            <p>
+            </Text>
+            <Text>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
               enim ad minim veniam, quis nostrud exercitation ullamco laboris
@@ -57,11 +55,10 @@ function Article() {
               reprehenderit in voluptate velit esse cillum dolore eu fugiat
               nulla pariatur. Excepteur sint occaecat cupidatat non proident,
               sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-          </section>
+            </Text>
+          </Paper>
         </article>
         <div className="axate-notice"></div>
-
       </main>
     </>
   );
