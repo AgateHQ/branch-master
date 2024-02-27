@@ -9,15 +9,7 @@ function Article() {
   const imageURL = "https://source.unsplash.com/random/600×400";
 
   const MyImage = (props) => {
-    return (
-      <Image
-        src={imageURL}
-        radius="md"
-        w={600}
-        h={400}
-        fit="contain"
-      />
-    );
+    return <Image src={imageURL} radius="md" w={600} h={400} fit="contain" />;
   };
 
   return (
@@ -26,7 +18,9 @@ function Article() {
         <Link href="/">Go Back</Link>
 
         <article className="premium">
-          <Title order={3} size="h1">Hello from post number {router.query.id}!</Title>
+          <Title order={3} size="h1">
+            Welcome to Post #{router.query.id}!
+          </Title>
           <MyImage />
           <Paper shadow="xs" p="xl">
             <Text>
