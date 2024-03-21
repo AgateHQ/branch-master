@@ -10,7 +10,6 @@ rad
 wse
 sle
 lsp
-cwr
 cwh
 mad
 kwr
