@@ -7,35 +7,22 @@ This is a simple Next.js project for testing the Axate wallet. It can run from d
 - Node.js
 - npm
 
-## Getting Started
-
-1. Install dependencies with `npm install`.
-2. Launch the development server using `npm run dev`.
-3. Open `http://localhost:3000` or use a subdomain such as `rad.localhost:3000` to emulate that publisher.
-
-## Publisher Subdomains
-
-Use any of the following short codes as subdomains to mimic a publisher:
-
-- rad
-- wse
-- sle
-- lsp
-- cwr
-- cwh
-- mad
-- kwr
-- yrk
-- mohm
-- bcc
-- pop
-- mag
-- bxn
-- gjw
-- brw
-- rtw
-
-When accessed through one of these subdomains, the app reads the hostname and acts as that publisher.
+rad
+wse
+sle
+lsp
+cwh
+mad
+kwr
+yrk
+mohm
+bcc
+pop
+mag
+bxn
+gjw
+brw
+rtw
 
 ## Formatting
 
