@@ -6,14 +6,15 @@ import { Text, Paper, Title, Image } from "@mantine/core";
 function Article() {
   const router = useRouter();
 
-  const imageURL = "https://source.unsplash.com/random/600×400";
-
-  const MyImage = (props) => {
-    return <Image src={imageURL} radius="md" w={600} h={400} fit="contain" />;
-  };
+  const imageURL = "/bg.jpg";
 
   return (
     <>
+      <style jsx>{`
+        .myImage {
+          height: 150px;
+        }
+      `}</style>
       <main className={styles.main}>
         <Link href="/">Go Back</Link>
 
@@ -21,7 +22,7 @@ function Article() {
           <Title order={3} size="h1">
             Welcome to Post #{router.query.id}!
           </Title>
-          <MyImage />
+          <Image className="myImage" src="https://images.unsplash.com/photo-1712839398257-8f7ee9127998?ixlib=rb-	1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=200&h=120" />
           <Paper shadow="xs" p="xl">
             <Text>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
