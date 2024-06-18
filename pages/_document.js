@@ -10,6 +10,7 @@ export default function Document() {
           id="axate-wallet"
           data-selector-premium-content=".premium"
           data-selector-in-page-notice=".axate-notice"
+          data-selector-disable-hide="true"
         ></div>
         <div>
           <Main />
