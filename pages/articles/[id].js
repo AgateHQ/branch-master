@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import styles from "../../styles/Article.module.css";
 import Link from "next/link";
 import Image from "next/image";
+import Script from 'next/script'
 
 function Article() {
   const router = useRouter();
@@ -61,7 +62,42 @@ function Article() {
           </section>
         </article>
         <div className="axate-notice"></div>
-
+        <Script id="my-inline-callback-script">{`
+         // These are callback functions reffered here: https://github.com/AgateHQ/axate-developer-docs/blob/main/docs/analytics-hooks.md
+        function agateUserLoggedOut(){
+          console.log("0. agateUserLoggedOut")
+        }
+        function axateInit(){
+          console.log("1. axateInit");
+        }
+        function agateUserLoggedIn(){
+          console.log("2. axateUserLoggedIn");
+        }
+        function axateUserOnFreePeriod(){
+          console.log("3. axateUserOnFreePeriod")
+        }
+        function agatePremiumContentRendered(){
+          console.log("agatePremiumContentRendered")
+        }
+        function axateUserHasAccessToContent(){
+          console.log("axateUserHasAccessToContent")
+        }
+        function axatePaidTransaction(){
+          console.log("axatePaidTransaction")
+        }
+        function axateBonusReadTransaction(){
+          console.log("axatePaidTransaction")
+        }
+        function axateFreePeriodTransaction(){
+          console.log("axateFreePeriodTransaction")
+        }
+        function axateAlreadyReadTransaction(){
+          console.log("axateAlreadyReadTransaction")
+        }
+        function axateUserOnFreePeriod(){
+          console.log("axateUserOnFreePeriod")
+        }
+        `}</Script>
       </main>
     </>
   );
