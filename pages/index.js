@@ -1,22 +1,20 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import { useState } from 'react';
+import { useState } from "react";
 import SelectEnviroment from "./components/SelectEnviroment";
-import { Grid, Skeleton, Container } from '@mantine/core';
+import { Grid, Skeleton, Container } from "@mantine/core";
 
 export default function Home() {
-
   return (
     <div className={styles.container}>
       <Head>
         <title>Branch Master - Axate Testing</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
       <main>
         <h1 className={styles.title}>Welcome to Branch Master</h1>
 
-        <SelectEnviroment/>
+        <SelectEnviroment />
 
         <p>
           Current Version: {process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_MESSAGE}
@@ -32,10 +30,7 @@ export default function Home() {
           </div>
         </div>
       </main>
-
       const child = <Skeleton height={140} radius="md" animate={false} />;
-
-
       <style jsx>{`
         main {
           padding: 5rem 0;
@@ -53,14 +48,17 @@ export default function Home() {
           border-radius: 5px;
           padding: 0.75rem;
           font-size: 1.1rem;
-          font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-            DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+          font-family:
+            Menlo,
+            Monaco,
+            Lucida Console,
+            Liberation Mono,
+            DejaVu Sans Mono,
+            Bitstream Vera Sans Mono,
+            Courier New,
+            monospace;
         }
       `}</style>
     </div>
   );
 }
-
-
-
-
