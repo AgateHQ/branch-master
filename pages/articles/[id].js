@@ -22,7 +22,10 @@ function Article() {
           <Title order={3} size="h1">
             Welcome to Post #{router.query.id}!
           </Title>
-          <Image className="myImage" src="https://images.unsplash.com/photo-1712839398257-8f7ee9127998?ixlib=rb-	1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=200&h=120" />
+          <Image
+            className="myImage"
+            src="https://images.unsplash.com/photo-1712839398257-8f7ee9127998?ixlib=rb-	1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=200&h=120"
+          />
           <Paper shadow="xs" p="xl">
             <Text>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do

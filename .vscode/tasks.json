@@ -1,11 +1,11 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"label": "Format Codebase",
-			"type": "shell",
-			"command": "npx prettier --write \"**/*.{js,jsx,ts,tsx,css,html,json,md}\"",
-			"problemMatcher": []
-		}
-	]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Format Codebase",
+      "type": "shell",
+      "command": "npx prettier --write \"**/*.{js,jsx,ts,tsx,css,html,json,md}\"",
+      "problemMatcher": []
+    }
+  ]
 }
