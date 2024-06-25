@@ -97,6 +97,15 @@ function Article() {
         function axateUserOnFreePeriod(){
           console.log("axateUserOnFreePeriod")
         }
+        // Notice based
+        function axatePayNow(){
+          console.log("axatePayNow pressed");
+        }
+        // axateSetChargeAutomaticallyFromNow
+        function axateSetChargeAutomaticallyFromNow(){
+          console.log("axateSetChargeAutomaticallyFromNow pressed");
+        }
+
         `}</Script>
       </main>
     </>
