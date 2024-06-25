@@ -13,6 +13,7 @@ export default function MyApp({ Component, pageProps }) {
 
   let axateScriptStaging = "https://wallet-staging.axate.io/bundle.js";
   let axateScriptLive = "https://wallet.axate.io/bundle.js";
+  let axateScriptLocal = "http://localhost:3000/bundle.js";
 
   useEffect(() => {
     const storedValue = localStorage.getItem("selectedEnviroment");

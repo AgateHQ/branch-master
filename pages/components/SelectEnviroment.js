@@ -9,6 +9,7 @@ const SelectEnviroment = () => {
 
     // Options for the select dropdown
     const options = [
+      { value: 'local', label: 'Local;' },
       { value: 'staging', label: 'Staging' },
       { value: 'live', label: 'Live' },
     ];
