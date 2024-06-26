@@ -30,7 +30,6 @@ function Article() {
 
         <article className="premium">
           <h1>Hello from post number {router.query.id}!</h1>
-          <MyImage />
           <section>
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -97,6 +96,7 @@ function Article() {
         function axateUserOnFreePeriod(){
           console.log("axateUserOnFreePeriod")
         }
+
         // Notice based
         function axatePayNow(){
           console.log("axatePayNow pressed");
