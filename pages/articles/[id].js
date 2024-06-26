@@ -85,7 +85,7 @@ function Article() {
           console.log("axatePaidTransaction")
         }
         function axateBonusReadTransaction(){
-          console.log("axatePaidTransaction")
+          console.log("!! axateBonusReadTransaction")
         }
         function axateFreePeriodTransaction(){
           console.log("axateFreePeriodTransaction")
