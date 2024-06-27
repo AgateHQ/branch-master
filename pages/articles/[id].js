@@ -97,6 +97,14 @@ function Article() {
           console.log("axateUserOnFreePeriod")
         }
 
+        function beforeReactToTransactionType(){
+          console.log("beforeReactToTransactionType);
+        }
+
+        function afterReactToTransactionType(){
+          console.log("afterReactToTransactionType");
+        }
+
         // Notice based
         function axatePayNow(){
           console.log("axatePayNow pressed");
