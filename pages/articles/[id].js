@@ -105,10 +105,21 @@ function Article() {
           console.log("afterReactToTransactionType");
         }
 
+
+        function afterReactToTransactionType(){
+          console.log("afterReactToTransactionType");
+        }
+
+        function axateInPageNoticeLoaded(){
+          console.log("axateInPageNoticeLoaded !!! ");
+        }
+
         // Notice based
         function axatePayNow(){
           console.log("axatePayNow pressed");
         }
+
+
         // axateSetChargeAutomaticallyFromNow
         function axateSetChargeAutomaticallyFromNow(){
           console.log("axateSetChargeAutomaticallyFromNow pressed");
