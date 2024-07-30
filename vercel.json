@@ -1,0 +1,17 @@
+{
+  "headers": [
+    {
+      "source": "/(.*)", // Apply to all routes
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "ALLOW-FROM https://*.branch-master.axate.io, https://page-notices.axate.io"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "frame-ancestors 'self' https://*.branch-master.axate.io https://page-notices.axate.io"
+        }
+      ]
+    }
+  ]
+}
