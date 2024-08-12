@@ -12,7 +12,7 @@ export default function Home() {
       <main>
         <h1 className={styles.title}>Welcome to Branch Master</h1>
         <p>Current Version: {process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_MESSAGE}</p>
-        <div className="premium">
+        <div className="big-index non-premium">
           <div className={styles.grid}>
             {Array.from({ length: 10 }, (_, index) => (
               <a href={`/articles/${index + 1}`} className={styles.card}>
