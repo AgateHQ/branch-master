@@ -6,22 +6,10 @@ Put proper CSS
 
 ## Pubs to consider
 
-rad
-wse
-sle
 lsp
 cwr
 cwh
-mad
-kwr
 yrk
 mohm
-bcc
-cricketer
 pop
 mag
-bxn
-gjw
-brw
-rtw
-rcnnpm 
