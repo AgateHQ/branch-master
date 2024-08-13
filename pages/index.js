@@ -1,17 +1,20 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
+import { useState } from 'react';
+import SelectEnviroment from "./components/SelectEnviroment";
 
 export default function Home() {
+
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
+        <title>Branch Master - Axate Testing</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>
         <h1 className={styles.title}>Welcome to Branch Master</h1>
-        <p>Current Version: {process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_MESSAGE}</p>
+
         <div className="big-index non-premium">
           <div className={styles.grid}>
             {Array.from({ length: 10 }, (_, index) => (
@@ -33,7 +36,9 @@ export default function Home() {
           justify-content: center;
           align-items: center;
         }
-        h1{color: #0070f3;}
+        h1 {
+          color: #0070f3;
+        }
         code {
           background: #fafafa;
           border-radius: 5px;
@@ -44,5 +49,6 @@ export default function Home() {
         }
       `}</style>
     </div>
+            <p>Current Version: {process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_MESSAGE}</p>
   );
 }
