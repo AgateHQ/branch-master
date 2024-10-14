@@ -8,8 +8,9 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Branch Master - Axate Testing</title>
+        <title>Axate Testing - Branch Master</title>
         <link rel="icon" href="/favicon.ico" />
+        <meta name="robots" content="noindex" />
       </Head>
       <main>
         <h1 className={styles.title}>Welcome to Branch Master</h1>
