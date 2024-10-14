@@ -20,11 +20,11 @@ export default function Home() {
         <p>
           Current Version: {process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_MESSAGE}
         </p>
-        <div className="premium">
+        <div className="not-premium">
           <div className={styles.grid}>
             {Array.from({ length: 10 }, (_, index) => (
               <a href={`/articles/${index + 1}`} className={styles.card}>
-                <h3>Article {index + 1} &rarr;</h3>
+                <h3>Article #{index + 1} &rarr;</h3>
                 <p>Find in-depth here...</p>
               </a>
             ))}
