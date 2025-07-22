@@ -1,62 +1,28 @@
 import Head from "next/head";
 import Link from "next/link";
-import styles from "../styles/Home.module.css";
 import SelectEnviroment from "./components/SelectEnviroment";
 
 export default function Home() {
   return (
-    <div className={styles.container}>
+    <div className="max-w-4xl mx-auto px-4">
       <Head>
         <title>Branch Master News</title>
         <link rel="icon" href="/favicon.ico" />
         <meta name="robots" content="noindex" />
       </Head>
 
-      <header className={styles.header} style={{
-        background: "#fff",
-        padding: "2rem 0 1.5rem 0",
-        borderBottom: "1px solid #e5e5e5",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.03)",
-        marginBottom: "2rem"
-      }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div>
-            <h1 style={{
-              fontFamily: "'Times New Roman', Times, serif",
-              fontWeight: 700,
-              fontSize: "3rem",
-              letterSpacing: "1px",
-              margin: 0,
-              color: "#222"
-            }}>
-              Branch Master News
-            </h1>
-            <hr style={{
-              width: "60px",
-              border: "none",
-              borderTop: "2px solid #222",
-              margin: "1rem 0 0.5rem 0"
-            }} />
-            <p style={{
-              fontFamily: "Georgia, serif",
-              fontSize: "1.15rem",
-              color: "#555",
-              margin: 0,
-              letterSpacing: "0.5px",
-              fontStyle: 'italic'
-            }}>
-              A new chapter in digital storytelling.
-            </p>
-          </div>
-          <div>
-            <SelectEnviroment />
-          </div>
+      <header className="py-8 mb-8 border-b border-gray-200 flex justify-between items-center">
+        <div>
+          <h1 className="text-5xl font-serif font-bold">Branch Master News</h1>
+          <p className="italic text-gray-600">
+            A new chapter in digital storytelling.
+          </p>
         </div>
+        <SelectEnviroment />
       </header>
 
-      <main className={styles.main}>
-
-        <div className={styles.grid}>
+      <main className="pb-8">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 30 }, (_, index) => {
             // Assign a random number from 1 to 10 for gradient selection
             const gradientNum = Math.floor(Math.random() * 30) + 1;
@@ -96,27 +62,23 @@ export default function Home() {
             return (
               <Link
                 href={`/articles/${index + 1}`}
-                className={styles.card}
                 key={index}
+                className="card bg-base-100 shadow hover:shadow-lg transition"
               >
-                <div
-                  className={styles.cardImage}
-                  style={{
-                    width: "100%",
-                    height: "160px",
-                    borderRadius: "12px",
-                    marginBottom: "1rem",
-                    background: gradients[gradientNum - 1]
-                  }}
+                <figure
+                  className="h-40 w-full"
+                  style={{ background: gradients[gradientNum - 1] }}
                 />
-                <h3>Article #{index + 1}</h3>
-                <p>Find in-depth here...</p>
+                <div className="card-body">
+                  <h3 className="card-title">Article #{index + 1}</h3>
+                  <p>Find in-depth here...</p>
+                </div>
               </Link>
             );
           })}
         </div>
 
-        <p className={styles.version}>
+        <p className="text-center text-sm text-gray-500 mt-8">
           Current Version: {process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_MESSAGE}
         </p>
       </main>

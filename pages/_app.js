@@ -1,3 +1,4 @@
+import "../styles/globals.css";
 import Script from "next/script";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
