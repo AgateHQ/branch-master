@@ -14,6 +14,18 @@ function Article() {
     [],
   );
 
+  const gradients = [
+    "linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)",
+    "linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)",
+    "linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%)",
+    "linear-gradient(135deg, #fdcbf1 0%, #e6dee9 100%)",
+    "linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)",
+    "linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%)",
+  ];
+
+  const articleId = parseInt(router.query.id || "1", 10);
+  const heroGradient = gradients[(articleId - 1) % gradients.length];
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const hostname = window.location.hostname;
@@ -25,8 +37,6 @@ function Article() {
       setRegistrationLink(link);
     }
   }, []);
-
-  const imageURL = "/bg.jpg";
 
   return (
     <>
@@ -46,6 +56,7 @@ function Article() {
           <Image
             className={styles.hero}
             src="https://images.unsplash.com/photo-1712839398257-8f7ee9127998?auto=format&fit=crop&w=800&h=400"
+            style={{ background: heroGradient }}
           />
           <Paper shadow="xs" p="xl" className={styles.content}>
             <Text>
