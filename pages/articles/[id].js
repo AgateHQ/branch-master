@@ -1,13 +1,18 @@
 import { useRouter } from "next/router";
 import styles from "../../styles/Article.module.css";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Text, Paper, Title, Image } from "@mantine/core";
 
 function Article() {
   const router = useRouter();
 
   const [registrationLink, setRegistrationLink] = useState("");
+  const premiumHeights = [750, 1000, 2000, 300];
+  const premiumHeight = useMemo(
+    () => premiumHeights[Math.floor(Math.random() * premiumHeights.length)],
+    [],
+  );
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -33,7 +38,7 @@ function Article() {
       <main className={styles.main}>
         <Link href="/">Go Back</Link>
 
-        <article className="premium">
+        <div className="article premium" data-premium-height={premiumHeight}>
           <Title order={3} size="h1">
             Welcome to Post #{router.query.id}!
           </Title>
@@ -60,7 +65,7 @@ function Article() {
               replace this placeholder copy.
             </Text>
           </Paper>
-        </article>
+        </div>
         <div className="axate-notice"></div>
       </main>
     </>
