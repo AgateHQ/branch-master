@@ -15,6 +15,10 @@
   "devDependencies": {
     "postcss": "^8.4.35",
     "postcss-preset-mantine": "^1.13.0",
-    "postcss-simple-vars": "^7.0.1"
+    "postcss-simple-vars": "^7.0.1",
+    "tailwindcss": "^4.1.11",
+    "autoprefixer": "^10.4.21",
+    "daisyui": "^5.0.46",
+    "@tailwindcss/postcss": "^4.1.11"
   }
 }
