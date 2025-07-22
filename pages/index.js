@@ -117,7 +117,10 @@ export default function Home() {
 
         <div className={styles.grid}>
           {Array.from({ length: 29 }, (_, index) => {
-            const gradientNum = Math.floor(Math.random() * gradients.length);
+            // Cycle through gradients deterministically to maintain
+            // consistent colors across renders. Index 0 is used by the hero
+            // article, so start cycling from the second gradient.
+            const gradientNum = (index % (gradients.length - 1)) + 1;
             const articleNum = index + 2;
             return (
               <Link
