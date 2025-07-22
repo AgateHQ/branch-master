@@ -122,21 +122,18 @@ export default function Home() {
             // article, so start cycling from the second gradient.
             const gradientNum = (index % (gradients.length - 1)) + 1;
             const articleNum = index + 2;
+            const isLarge = index % 7 === 0;
             return (
               <Link
                 href={`/articles/${articleNum}`}
-                className={styles.card}
+                className={`${styles.card} ${isLarge ? styles.cardLarge : ""}`}
                 key={articleNum}
               >
                 <div
-                  className={styles.cardImage}
-                  style={{
-                    width: "100%",
-                    height: "160px",
-                    borderRadius: "12px",
-                    marginBottom: "1rem",
-                    background: gradients[gradientNum],
-                  }}
+                  className={`${styles.cardImage} ${
+                    isLarge ? styles.cardLargeImage : ""
+                  }`}
+                  style={{ background: gradients[gradientNum] }}
                 />
                 <h3>Article #{articleNum}</h3>
                 <p>Find in-depth here...</p>
