@@ -33,11 +33,26 @@
   background: linear-gradient(135deg, #cfd9df, #e2ebf0);
 }
 
-.linkBack {
-  display: block;
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   margin-bottom: 1rem;
-  color: #555;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #f7f7f7;
+  color: #333;
   font-size: 0.875rem;
+  text-decoration: none;
+  transition:
+    background 0.2s,
+    box-shadow 0.2s;
+}
+
+.backButton:hover {
+  background: #eee;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .content {

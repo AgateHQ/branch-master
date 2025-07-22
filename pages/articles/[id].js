@@ -41,8 +41,8 @@ function Article() {
   return (
     <>
       <main className={styles.main}>
-        <Link href="/" className={styles.linkBack}>
-          Go Back
+        <Link href="/" className={styles.backButton}>
+          ← Back
         </Link>
 
         <div
