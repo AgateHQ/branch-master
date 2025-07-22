@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import styles from "../../styles/Article.module.css";
 import Link from "next/link";
 import { useEffect, useState, useMemo } from "react";
-import { Text, Paper, Title, Image } from "@mantine/core";
+import { Text, Paper, Image } from "@mantine/core";
 
 function Article() {
   const router = useRouter();
@@ -30,26 +30,24 @@ function Article() {
 
   return (
     <>
-      <style jsx>{`
-        .myImage {
-          height: 150px;
-        }
-      `}</style>
       <main className={styles.main}>
-        <Link href="/">Go Back</Link>
+        <Link href="/" className={styles.linkBack}>
+          Go Back
+        </Link>
 
-        <div className="article premium" data-premium-height={premiumHeight}>
-          <Title order={3} size="h1">
-            Welcome to Post #{router.query.id}!
-          </Title>
+        <div
+          className={`article premium ${styles.article}`}
+          data-premium-height={premiumHeight}
+        >
+          <h1 className={styles.title}>Welcome to Post #{router.query.id}!</h1>
           {registrationLink && (
             <a href={registrationLink}>Go to new registration</a>
           )}
           <Image
-            className="myImage"
-            src="https://images.unsplash.com/photo-1712839398257-8f7ee9127998?ixlib=rb-	1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=200&h=120"
+            className={styles.hero}
+            src="https://images.unsplash.com/photo-1712839398257-8f7ee9127998?auto=format&fit=crop&w=800&h=400"
           />
-          <Paper shadow="xs" p="xl">
+          <Paper shadow="xs" p="xl" className={styles.content}>
             <Text>
               This demo article demonstrates how Branch Master loads dynamic
               content. The post number in the URL shows which article you’re
