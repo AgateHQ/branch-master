@@ -64,6 +64,51 @@ function Article() {
               different sections to see how the site adapts. Real stories would
               replace this placeholder copy.
             </Text>
+            <Text>
+              All of these pages work with the Axate wallet, so the registration
+              link updates automatically based on the subdomain you choose.
+            </Text>
+            <Text>
+              Try switching the hostname to other publishers or exploring
+              different sections to see how the site adapts. Real stories would
+              replace this placeholder copy.
+            </Text>
+            <Text>
+              All of these pages work with the Axate wallet, so the registration
+              link updates automatically based on the subdomain you choose.
+            </Text>
+            <Text>
+              Try switching the hostname to other publishers or exploring
+              different sections to see how the site adapts. Real stories would
+              replace this placeholder copy.
+            </Text>
+            <Text>
+              All of these pages work with the Axate wallet, so the registration
+              link updates automatically based on the subdomain you choose.
+            </Text>
+            <Text>
+              Try switching the hostname to other publishers or exploring
+              different sections to see how the site adapts. Real stories would
+              replace this placeholder copy.
+            </Text>
+            <Text>
+              All of these pages work with the Axate wallet, so the registration
+              link updates automatically based on the subdomain you choose.
+            </Text>
+            <Text>
+              Try switching the hostname to other publishers or exploring
+              different sections to see how the site adapts. Real stories would
+              replace this placeholder copy.
+            </Text>
+            <Text>
+              All of these pages work with the Axate wallet, so the registration
+              link updates automatically based on the subdomain you choose.
+            </Text>
+            <Text>
+              Try switching the hostname to other publishers or exploring
+              different sections to see how the site adapts. Real stories would
+              replace this placeholder copy.
+            </Text>
           </Paper>
         </div>
         <div className="axate-notice"></div>
