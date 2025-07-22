@@ -27,6 +27,44 @@
   padding: 2rem 0;
 }
 
+.heroArticle {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  margin-bottom: 2rem;
+}
+
+.heroImage {
+  width: 100%;
+  height: 260px;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.heroArticle h2 {
+  font-size: 2rem;
+  margin: 0 0 0.5rem 0;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.heroArticle p {
+  margin: 0;
+  color: #444;
+}
+
+.ads {
+  width: 100%;
+  height: 160px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #eeeeee, #cccccc);
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
