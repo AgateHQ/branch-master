@@ -31,7 +31,7 @@ function Article() {
   return (
     <>
       <main className={styles.main}>
-        <Link href="/" className={styles.linkBack}>
+        <Link href="/" className="btn btn-sm btn-outline mb-4">
           Go Back
         </Link>
 
@@ -41,13 +41,15 @@ function Article() {
         >
           <h1 className={styles.title}>Welcome to Post #{router.query.id}!</h1>
           {registrationLink && (
-            <a href={registrationLink}>Go to new registration</a>
+            <a href={registrationLink} className="btn btn-primary my-4">
+              Go to new registration
+            </a>
           )}
           <Image
             className={styles.hero}
             src="https://images.unsplash.com/photo-1712839398257-8f7ee9127998?auto=format&fit=crop&w=800&h=400"
           />
-          <Paper shadow="xs" p="xl" className={styles.content}>
+          <Paper shadow="xs" p="xl" className={`${styles.content} prose`}>
             <Text>
               This demo article demonstrates how Branch Master loads dynamic
               content. The post number in the URL shows which article you’re
