@@ -38,3 +38,23 @@ button {
 img {
   height: 200px;
 }
+
+.light-wrapper {
+  min-height: 100vh;
+  width: 100%;
+  background-color: #fff;
+  position: relative;
+}
+
+.light-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: radial-gradient(
+    125% 125% at 50% 90%,
+    #ffffff 40%,
+    #10b981 100%
+  );
+  background-size: 100% 100%;
+}
