@@ -4,6 +4,39 @@ import styles from "../styles/Home.module.css";
 import SelectEnviroment from "./components/SelectEnviroment";
 
 export default function Home() {
+  // Vivid poetic lines inspired by John Keats
+  const keatsLines = [
+    "A thing of beauty is a joy forever, its loveliness increases; it will never pass into nothingness.",
+    "Bright star, would I were steadfast as thou art—still, still to hear her tender-taken breath.",
+    "Heard melodies are sweet, but those unheard are sweeter, drifting on the air of dreams.",
+    "Season of mists and mellow fruitfulness, close bosom-friend of the maturing sun.",
+    "O for a draught of vintage! that hath been cooled a long age in the deep-delved earth.",
+    "The poetry of earth is ceasing never, in the hush of night or the song of summer.",
+    "My heart aches, and a drowsy numbness pains my sense, as though of hemlock I had drunk.",
+    "There is a budding morrow in midnight, and a silver silence in the dawn.",
+    "Softly the evening came with the sunset, trailing her garments of light.",
+    "Beauty is truth, truth beauty,—that is all ye know on earth, and all ye need to know.",
+    "The silver moon, fair queen of the night, glides in beauty through the sky.",
+    "Upon the shore of the wide world I stand alone, and think till love and fame to nothingness do sink.",
+    "Ode to a nightingale, sing on in ecstasy, beyond the shadows of the world.",
+    "Tender is the night, and haply the dawn, with dewy freshness on the lawn.",
+    "The murmurous haunt of flies on summer eves, where poppies nod in drowsy dreams.",
+    "Where youth grows pale, and spectre-thin, and dies, where but to think is to be full of sorrow.",
+    "The voice I hear this passing night was heard in ancient days by emperor and clown.",
+    "Magic casements, opening on the foam of perilous seas, in faery lands forlorn.",
+    "The sedge has withered from the lake, and no birds sing, save the melancholy owl.",
+    "Thou foster-child of silence and slow time, sylvan historian, who canst thus express a flowery tale.",
+    "With beaded bubbles winking at the brim, and purple-stained mouth.",
+    "The sun, the moon, the stars, the seas, the hills and the plains, are all the poetry of earth.",
+    "A flowery tale more sweetly than our rhyme, told in soft whispers of the wind.",
+    "The grass, the thicket, and the fruit-tree wild, white hawthorn and the pastoral eglantine.",
+    "The coming musk-rose, full of dewy wine, the murmurous haunt of flies on summer eves.",
+    "The blissful cloud of summer-indolence floats on the blue sky’s deep expanse.",
+    "The music yearning like a God in pain, sweet as the nightingale’s refrain.",
+    "The world is full of troubles, and anxious in its sleep, yet beauty weaves a golden thread.",
+    "The moonlight sleeps upon this bank, and the wind stirs the dreaming leaves.",
+    "A drowsy numbness pains my sense, as though of hemlock I had drunk, or emptied some dull opiate to the drains.",
+  ];
   // Gradient palette used for article images
   const gradients = [
     "linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)",
@@ -104,16 +137,33 @@ export default function Home() {
       </header>
 
       <main className={styles.main}>
-        <Link href="/articles/1" className={styles.heroArticle}>
-          <div
-            className={styles.heroImage}
-            style={{ background: gradients[0] }}
-          />
-          <h2>Article #1</h2>
-          <p>Find in-depth here...</p>
-        </Link>
+        {/* Hero Article with vivid Keatsian line */}
+        {(() => {
+          const heroLine = keatsLines[Math.floor(Math.random() * keatsLines.length)];
+          return (
+            <Link href="/articles/1" className={styles.heroArticle}>
+              <div
+                className={styles.heroImage}
+                style={{ background: gradients[0] }}
+              />
+              <h2  style={{
+                  fontFamily: "Georgia, serif",
+                  fontWeight: 400,
+                  fontStyle: "italic",
+                  fontSize: "2.1rem",
+                  color: "#3a2c1a",
+                  margin: "0.5rem 0 0.25rem 0",
+                  letterSpacing: "0.5px",
+                  textShadow: "0 1px 2px rgba(255,255,255,0.15)",
+                  padding: "0 1rem"}}>Article #1</h2>
+              <p style={{ fontStyle: "italic", color: "#444" }}>{heroLine}</p>
+            </Link>
+          );
+        })()}
 
-        <div className={styles.ads}>Ads Ads Ads</div>
+        <div className={styles.ads} style={{ fontStyle: "italic", color: "#7a5c2e", textAlign: "center", fontFamily: "Georgia, serif", fontSize: "1.1rem" }}>
+          "In the garden of commerce, bright banners bloom—whispers of want in the marketplace of dreams."
+        </div>
 
         <div className={styles.grid}>
           {Array.from({ length: 29 }, (_, index) => {
@@ -123,6 +173,8 @@ export default function Home() {
             const gradientNum = (index % (gradients.length - 1)) + 1;
             const articleNum = index + 2;
             const isLarge = index % 7 === 0;
+            // Pick a vivid poetic line for each card
+            const poeticLine = keatsLines[Math.floor(Math.random() * keatsLines.length)];
             return (
               <Link
                 href={`/articles/${articleNum}`}
@@ -135,8 +187,20 @@ export default function Home() {
                   }`}
                   style={{ background: gradients[gradientNum] }}
                 />
-                <h3>Article #{articleNum}</h3>
-                <p>Find in-depth here...</p>
+                <div style={{ textAlign: "center" }}>
+                  <h3 style={{
+                    fontFamily: "Georgia, serif",
+                    fontWeight: 400,
+                    fontStyle: "italic",
+                    fontSize: isLarge ? "2.1rem" : "1.35rem",
+                    color: "#3a2c1a",
+                    margin: "0.5rem 0 0.25rem 0",
+                    letterSpacing: "0.5px",
+                    textShadow: "0 1px 2px rgba(255,255,255,0.15)",
+                    padding: "0 1rem 0 1rem"
+                  }}>Article #{articleNum}</h3>
+                  <p style={{ fontStyle: "italic", color: "#444", padding: "0.5rem 1rem 1rem 1rem", margin: 0 }}>{poeticLine}</p>
+                </div>
               </Link>
             );
           })}
