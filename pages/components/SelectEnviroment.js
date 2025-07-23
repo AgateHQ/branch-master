@@ -29,7 +29,11 @@ const SelectEnviroment = () => {
 
   return (
     <div>
-      <select value={selectedOption} onChange={handleOptionChange}>
+      <select
+        className="select select-bordered w-full max-w-xs"
+        value={selectedOption}
+        onChange={handleOptionChange}
+      >
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}

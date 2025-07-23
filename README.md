@@ -1,6 +1,7 @@
 # Branch Master Demo
 
 This is a simple Next.js project for testing the Axate wallet. It can run from different subdomains to imitate various publishers.
+The UI is styled with **Tailwind CSS** and **DaisyUI** using the `silk` theme.
 
 ## Requirements
 
