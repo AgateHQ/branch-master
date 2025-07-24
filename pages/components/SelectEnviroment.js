@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { SegmentedControl } from "@mantine/core";
+import { Switch } from "@mantine/core";
 
 const SelectEnviroment = () => {
   const router = useRouter();
   const [selectedEnviroment, setSelectedEnviroment] = useState("staging");
 
-  const handleOptionChange = (value) => {
+  const handleOptionChange = (checked) => {
+    const value = checked ? "live" : "staging";
     setSelectedEnviroment(value);
     localStorage.setItem("selectedEnviroment", value);
     router.reload();
@@ -20,13 +21,13 @@ const SelectEnviroment = () => {
   }, []);
 
   return (
-    <SegmentedControl
-      value={selectedEnviroment}
-      onChange={handleOptionChange}
-      data={[
-        { label: "Staging", value: "staging" },
-        { label: "Live", value: "live" },
-      ]}
+    <Switch
+      checked={selectedEnviroment === "live"}
+      onChange={(event) => handleOptionChange(event.currentTarget.checked)}
+      onLabel="Live"
+      offLabel="Staging"
+      size="lg"
+      radius="xl"
     />
   );
 };
