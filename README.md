@@ -9,7 +9,7 @@ This is a simple Next.js project for testing the Axate wallet. It can run from d
 
 ## Getting Started
 
-1. Install dependencies with `npm install`.
+1. Install dependencies with `npm install`. This will also fetch the [Mantine](https://mantine.dev/) UI library used in the project.
 2. Launch the development server using `npm run dev`.
 3. Open `http://localhost:3000` or use a subdomain such as `rad.localhost:3000` to emulate that publisher.
 
