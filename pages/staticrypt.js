@@ -1,9 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import styles from "../styles/Article.module.css";
+
+function generateSecurePassword(length = 16) {
+  const charset =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?";
+  const array = new Uint32Array(length);
+  window.crypto.getRandomValues(array);
+  return Array.from(array, (x) => charset[x % charset.length]).join("");
+}
 
 export default function StaticryptPage() {
   const [fileContent, setFileContent] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setPassword(generateSecurePassword());
+  }, []);
+
+  const handleGeneratePassword = () => {
+    setPassword(generateSecurePassword());
+  };
 
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
@@ -50,25 +67,36 @@ export default function StaticryptPage() {
   };
 
   return (
-    <div style={{ maxWidth: 500, margin: "2rem auto", textAlign: "center" }}>
-      <h1>Encrypt HTML</h1>
-      <input type="file" accept=".html" onChange={handleFileChange} />
-      <div>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          style={{ marginTop: "1rem", width: "100%" }}
-        />
-      </div>
-      <button
-        onClick={handleEncrypt}
-        disabled={loading || !fileContent || !password}
-        style={{ marginTop: "1rem" }}
+    <main className={styles.main}>
+      <div
+        className={styles.article}
+        style={{ padding: "2rem", textAlign: "center" }}
       >
-        {loading ? "Encrypting..." : "Encrypt"}
-      </button>
-    </div>
+        <h1 className={styles.title}>Encrypt HTML</h1>
+        <input type="file" accept=".html" onChange={handleFileChange} />
+        <div>
+          <input
+            type="text"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            style={{ marginTop: "1rem", width: "100%", padding: "0.5rem" }}
+          />
+        </div>
+        <button
+          onClick={handleGeneratePassword}
+          style={{ marginTop: "0.75rem" }}
+        >
+          Generate secure password
+        </button>
+        <button
+          onClick={handleEncrypt}
+          disabled={loading || !fileContent || !password}
+          style={{ marginTop: "1rem" }}
+        >
+          {loading ? "Encrypting..." : "Encrypt"}
+        </button>
+      </div>
+    </main>
   );
 }
