@@ -73,6 +73,12 @@ export default function StaticryptPage() {
         style={{ padding: "2rem", textAlign: "center" }}
       >
         <h1 className={styles.title}>Encrypt HTML</h1>
+        <p style={{ marginTop: "0.5rem" }}>
+          Upload an HTML file and choose a password to generate a
+          password-protected version. The encrypted file will ask for the
+          password when opened and includes a "Remember me" option to store it
+          for 30 days.
+        </p>
         <input type="file" accept=".html" onChange={handleFileChange} />
         <div>
           <input
