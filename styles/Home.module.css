@@ -116,6 +116,30 @@
   color: #444;
 }
 
+/* Content wrapper for custom card descriptions */
+.cardContent {
+  text-align: center;
+}
+
+.cardTitle {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 1.35rem;
+  color: #3a2c1a;
+  margin: 0.5rem 0 0.25rem 0;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.15);
+  padding: 0 1rem;
+}
+
+.cardDescription {
+  font-style: italic;
+  color: #444;
+  padding: 0.5rem 1rem 1rem 1rem;
+  margin: 0;
+}
+
 .version {
   text-align: center;
   margin-top: 2rem;
