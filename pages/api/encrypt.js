@@ -23,11 +23,8 @@ export default async function handler(req, res) {
     const salt = cryptoEngine.generateRandomSalt();
     const encryptedMsg = await encode(html, password, salt);
 
-    const staticryptRoot = path.dirname(
-      require.resolve("staticrypt/package.json"),
-    );
     const templatePath = path.join(
-      staticryptRoot,
+      process.cwd(),
       "lib",
       "password_template.html",
     );
