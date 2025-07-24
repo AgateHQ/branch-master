@@ -13,7 +13,7 @@ export default function AxateIntegration() {
   }, []);
   const snippet =
     `<!-- Preload and load Axate bundle -->\n` +
-    `<link rel="preload" href="https://wallet-staging.axate.io/bundle.js" as="script">\n` +
+    `<link rel="preload" href="https://wallet.axate.io/bundle.js" as="script">\n` +
     `<script src="https://wallet.axate.io/bundle.js"></script>\n\n` +
     `<!-- Axate config -->\n` +
     `<!-- Change .premium below if your CMS uses a different class for premium content -->\n` +
@@ -46,17 +46,10 @@ export default function AxateIntegration() {
       </Link>
       <div className={styles.article}>
         <h1 className={styles.title}>Integrating the Axate Wallet</h1>
-        <p style={{ marginBottom: "1rem" }}>
+        <p className={styles.articleParagraph}>
           Use the following snippet to add the Axate wallet to your site:
         </p>
-        <pre
-          style={{
-            overflowX: "auto",
-            background: "#f7f7f7",
-            padding: "1rem",
-            borderRadius: "6px",
-          }}
-        >
+        <pre className={styles.codeSnippet}>
           <code ref={codeRef} className="language-html">
             {snippet}
           </code>
