@@ -1,7 +1,16 @@
 import Link from "next/link";
+import { useEffect, useRef } from "react";
+import hljs from "highlight.js";
+import "highlight.js/styles/github.css";
 import styles from "../../styles/Article.module.css";
 
 export default function AxateIntegration() {
+  const codeRef = useRef(null);
+  useEffect(() => {
+    if (codeRef.current) {
+      hljs.highlightElement(codeRef.current);
+    }
+  }, []);
   const snippet =
     `<!-- Preload and load Axate bundle -->\n` +
     `<link rel="preload" href="https://wallet-staging.axate.io/bundle.js" as="script">\n` +
@@ -48,7 +57,9 @@ export default function AxateIntegration() {
             borderRadius: "6px",
           }}
         >
-          <code>{snippet}</code>
+          <code ref={codeRef} className="language-html">
+            {snippet}
+          </code>
         </pre>
       </div>
     </main>
