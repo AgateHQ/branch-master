@@ -1,42 +1,33 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { SegmentedControl } from "@mantine/core";
 
 const SelectEnviroment = () => {
   const router = useRouter();
-  const [selectedEnviroment, setSelectedEnviroment] = useState("");
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedEnviroment, setSelectedEnviroment] = useState("staging");
 
-  // Options for the select dropdown
-  const options = [
-    { value: "staging", label: "Staging" },
-    { value: "live", label: "Live" },
-  ];
-
-  // Function to handle option change
-  const handleOptionChange = (e) => {
-    const selectedValue = e.target.value;
-    setSelectedEnviroment(selectedValue);
-    localStorage.setItem("selectedEnviroment", selectedValue);
-    router.reload(); // Trigger page reload
+  const handleOptionChange = (value) => {
+    setSelectedEnviroment(value);
+    localStorage.setItem("selectedEnviroment", value);
+    router.reload();
   };
 
   useEffect(() => {
     const storedValue = localStorage.getItem("selectedEnviroment");
     if (storedValue) {
-      setSelectedOption(storedValue);
+      setSelectedEnviroment(storedValue);
     }
   }, []);
 
   return (
-    <div>
-      <select value={selectedOption} onChange={handleOptionChange}>
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </div>
+    <SegmentedControl
+      value={selectedEnviroment}
+      onChange={handleOptionChange}
+      data={[
+        { label: "Staging", value: "staging" },
+        { label: "Live", value: "live" },
+      ]}
+    />
   );
 };
 
