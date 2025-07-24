@@ -32,19 +32,20 @@ export default async function handler(req, res) {
 
     const staticryptConfig = {
       staticryptEncryptedMsgUniqueVariableName: encryptedMsg,
-      isRememberEnabled: false,
-      rememberDurationInDays: 0,
+      isRememberEnabled: true,
+      rememberDurationInDays: 30,
       staticryptSaltUniqueVariableName: salt,
     };
 
     const templateData = {
-      is_remember_enabled: JSON.stringify(false),
+      is_remember_enabled: JSON.stringify(true),
       js_staticrypt: buildStaticryptJS(),
       template_button: "DECRYPT",
       template_color_primary: "#4CAF50",
       template_color_secondary: "#76B852",
       template_error: "Bad password!",
-      template_instructions: "",
+      template_instructions:
+        "Enter the password you chose to decrypt this page. You can also select 'Remember me' to skip the password for 30 days.",
       template_placeholder: "Password",
       template_remember: "Remember me",
       template_title: "Protected Page",
