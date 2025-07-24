@@ -187,30 +187,9 @@ export default function Home() {
               className={styles.cardImage}
               style={{ background: gradients[1] }}
             />
-            <div style={{ textAlign: "center" }}>
-              <h3
-                style={{
-                  fontFamily: "Georgia, serif",
-                  fontWeight: 400,
-                  fontStyle: "italic",
-                  fontSize: "1.35rem",
-                  color: "#3a2c1a",
-                  margin: "0.5rem 0 0.25rem 0",
-                  letterSpacing: "0.5px",
-                  textShadow: "0 1px 2px rgba(255,255,255,0.15)",
-                  padding: "0 1rem 0 1rem",
-                }}
-              >
-                Axate Wallet Integration
-              </h3>
-              <p
-                style={{
-                  fontStyle: "italic",
-                  color: "#444",
-                  padding: "0.5rem 1rem 1rem 1rem",
-                  margin: 0,
-                }}
-              >
+            <div className={styles.cardContent}>
+              <h3 className={styles.cardTitle}>Axate Wallet Integration</h3>
+              <p className={styles.cardDescription}>
                 Learn how to embed the Axate wallet.
               </p>
             </div>

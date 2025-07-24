@@ -63,3 +63,16 @@
 .section {
   margin-top: 2rem;
 }
+
+/* Paragraph on integration article introducing the code snippet */
+.articleParagraph {
+  margin-bottom: 1rem;
+}
+
+/* Styling for the highlighted code snippet */
+.codeSnippet {
+  overflow-x: auto;
+  background: #f7f7f7;
+  padding: 1rem;
+  border-radius: 6px;
+}
