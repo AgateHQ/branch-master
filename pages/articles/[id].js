@@ -33,13 +33,15 @@ function Article() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const hostname = window.location.hostname;
-      const subdomain = hostname.split(".")[0];
-      const redirectTo = window.location.href;
-      const link = `https://register.axate.io/?pub=${subdomain}&redirectTo=${encodeURIComponent(
-        redirectTo,
-      )}`;
-      setRegistrationLink(link);
+          const hostname = window.location.hostname;
+          const subdomain = hostname.split(".")[0];
+          const redirectTo = window.location.href;
+          const env = localStorage.getItem("selectedEnviroment") || "staging";
+          const registerBase = env === "live"
+            ? "https://register.axate.io"
+            : "https://register-staging.axate.io";
+          const link = `${registerBase}/?pub=${subdomain}&redirectTo=${encodeURIComponent(redirectTo)}`;
+          setRegistrationLink(link);
     }
   }, []);
 
