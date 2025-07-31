@@ -10,6 +10,10 @@ Use Prettier to keep the code style consistent:
 npx prettier --write "**/*.{js,jsx,ts,tsx,css,html,json,md}"
 ```
 
+## Indentation
+
+Use 2 spaces for indentation in all files.
+
 ## Validation
 
 Before committing, ensure the project builds without errors:
