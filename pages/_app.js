@@ -2,6 +2,7 @@ import Script from "next/script";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { createTheme, MantineProvider } from "@mantine/core";
+import "../styles/globals.css";
 
 export default function MyApp({ Component, pageProps }) {
   const theme = createTheme({
@@ -30,13 +31,13 @@ export default function MyApp({ Component, pageProps }) {
   }
 
   return (
-    <>
+    <div className="app-container">
       <MantineProvider theme={theme}>
         <Script
           src={enviroment === "live" ? axateScriptLive : axateScriptStaging}
         />
         <Component {...pageProps} />
       </MantineProvider>
-    </>
+    </div>
   );
 }
