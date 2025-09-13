@@ -9,7 +9,7 @@ export default function MyApp({ Component, pageProps }) {
     /** Put your mantine theme override here */
   });
 
-  const [enviroment, setEnviroment] = useState("");
+  const [enviroment, setEnviroment] = useState("staging");
   const [localStorageReady, setLocalStorageReady] = useState(false);
 
   let axateScriptStaging = "https://wallet-staging.axate.io/bundle.js";
@@ -18,13 +18,13 @@ export default function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     const storedValue = localStorage.getItem("selectedEnviroment");
-    if (storedValue) {
-      setEnviroment(storedValue);
+    if (storedValue === "live") {
+      setEnviroment("live");
+    } else {
+      setEnviroment("staging");
     }
     setLocalStorageReady(true);
   }, []);
-
-  console.log(enviroment);
 
   if (!localStorageReady) {
     return <div>Loading Branch Master...</div>;
@@ -35,6 +35,7 @@ export default function MyApp({ Component, pageProps }) {
       <MantineProvider theme={theme}>
         <Script
           src={enviroment === "live" ? axateScriptLive : axateScriptStaging}
+          crossOrigin="anonymous"
         />
         <Component {...pageProps} />
       </MantineProvider>
