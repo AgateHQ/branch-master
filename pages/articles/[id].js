@@ -1,8 +1,17 @@
+import Head from "next/head";
 import { useRouter } from "next/router";
 import styles from "../../styles/Article.module.css";
 import Link from "next/link";
 import { useEffect, useState, useMemo } from "react";
 import { Text, Paper, Image } from "@mantine/core";
+
+const DEFAULT_SITE_ORIGIN = "https://branchmaster.news";
+const ARTICLE_IMAGE_URL =
+  "https://images.unsplash.com/photo-1712839398257-8f7ee9127998?auto=format&fit=crop&w=800&h=400";
+const ARTICLE_DESCRIPTION =
+  "Today, I choose to create with purpose and passion, knowing that every word I write is a step toward a brighter future. My thoughts are seeds, and with care, I nurture them into stories that inspire and uplift those who read them.";
+const PUBLISHER_NAME = "Branch Master News";
+const AUTHOR_NAME = "Branch Master Editorial Team";
 
 function Article() {
   // Handler for random article navigation
@@ -13,6 +22,7 @@ function Article() {
   const router = useRouter();
 
   const [registrationLink, setRegistrationLink] = useState("");
+  const [articleUrl, setArticleUrl] = useState("");
   const premiumHeights = [750, 1000, 2000, 300];
   const premiumHeight = useMemo(
     () => premiumHeights[Math.floor(Math.random() * premiumHeights.length)],
@@ -29,7 +39,68 @@ function Article() {
   ];
 
   const articleId = parseInt(router.query.id || "1", 10);
-  const heroGradient = gradients[(articleId - 1) % gradients.length];
+  const safeArticleId =
+    Number.isFinite(articleId) && articleId > 0 ? articleId : 1;
+  const heroGradient = gradients[(safeArticleId - 1) % gradients.length];
+  const articleHeadline = `Welcome to Post #${safeArticleId}!`;
+  const articleOrigin = useMemo(() => {
+    if (!articleUrl) {
+      return DEFAULT_SITE_ORIGIN;
+    }
+    try {
+      return new URL(articleUrl).origin;
+    } catch (error) {
+      return DEFAULT_SITE_ORIGIN;
+    }
+  }, [articleUrl]);
+  const canonicalUrl = useMemo(() => {
+    if (articleUrl) {
+      return articleUrl;
+    }
+    return `${articleOrigin}/articles/${safeArticleId}`;
+  }, [articleUrl, articleOrigin, safeArticleId]);
+  const publishedDate = useMemo(() => {
+    const baseDate = new Date(Date.UTC(2024, 0, 1, 9, 0, 0));
+    baseDate.setDate(baseDate.getDate() + (safeArticleId - 1));
+    return baseDate.toISOString();
+  }, [safeArticleId]);
+  const articleSchema = useMemo(
+    () => ({
+      "@context": "https://schema.org",
+      "@type": "NewsArticle",
+      mainEntityOfPage: {
+        "@type": "WebPage",
+        "@id": canonicalUrl,
+      },
+      headline: articleHeadline,
+      image: [ARTICLE_IMAGE_URL],
+      datePublished: publishedDate,
+      dateModified: publishedDate,
+      author: {
+        "@type": "Organization",
+        name: AUTHOR_NAME,
+      },
+      publisher: {
+        "@type": "NewsMediaOrganization",
+        name: PUBLISHER_NAME,
+        url: articleOrigin,
+        logo: {
+          "@type": "ImageObject",
+          url: `${articleOrigin}/ai.png`,
+        },
+      },
+      description: ARTICLE_DESCRIPTION,
+      isAccessibleForFree: false,
+      hasPart: {
+        "@type": "WebPageElement",
+        isAccessibleForFree: false,
+        cssSelector: ".premium",
+      },
+      inLanguage: "en",
+      articleSection: "Features",
+    }),
+    [articleHeadline, articleOrigin, canonicalUrl, publishedDate],
+  );
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -43,11 +114,22 @@ function Article() {
           : "https://register-staging.axate.io";
       const link = `${registerBase}/?pub=${subdomain}&redirectTo=${encodeURIComponent(redirectTo)}`;
       setRegistrationLink(link);
+      setArticleUrl(window.location.href);
     }
   }, []);
 
   return (
     <>
+      <Head>
+        <title>{articleHeadline}</title>
+        <meta name="description" content={ARTICLE_DESCRIPTION} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(articleSchema),
+          }}
+        />
+      </Head>
       <main className={styles.main}>
         <div style={{ display: "flex", width: "100%", marginBottom: "1.5rem" }}>
           <div style={{ width: "50%", paddingRight: "0.5rem" }}>
@@ -103,11 +185,11 @@ function Article() {
           className={`article premium ${styles.article}`}
           data-premium-height={premiumHeight}
         >
-          <h1 className={styles.title}>Welcome to Post #{router.query.id}!</h1>
+          <h1 className={styles.title}>{articleHeadline}</h1>
           {/* Registration button moved below the image */}
           <Image
             className={styles.hero}
-            src="https://images.unsplash.com/photo-1712839398257-8f7ee9127998?auto=format&fit=crop&w=800&h=400"
+            src={ARTICLE_IMAGE_URL}
             style={{ background: heroGradient }}
           />
           {registrationLink && (
