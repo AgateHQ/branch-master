@@ -118,6 +118,21 @@ function Article() {
     }
   }, []);
 
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    const walletElement = document.getElementById("axate-wallet");
+    if (!walletElement) {
+      return;
+    }
+    const isOddArticle = safeArticleId % 2 === 1;
+    walletElement.setAttribute(
+      "data-selector-button-mode",
+      isOddArticle ? "true" : "false",
+    );
+  }, [safeArticleId]);
+
   return (
     <>
       <Head>
