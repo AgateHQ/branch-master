@@ -131,6 +131,20 @@ function Article() {
       "data-selector-button-mode",
       isOddArticle ? "true" : "false",
     );
+    const noticeSelector = walletElement.getAttribute(
+      "data-selector-in-page-notice",
+    );
+    if (isOddArticle && noticeSelector) {
+      const noticeElement = document.querySelector(noticeSelector);
+      if (noticeElement && noticeElement.parentNode) {
+        noticeElement.parentNode.insertBefore(walletElement, noticeElement);
+      }
+      return;
+    }
+    const bodyElement = document.body;
+    if (bodyElement && bodyElement.firstChild !== walletElement) {
+      bodyElement.insertBefore(walletElement, bodyElement.firstChild);
+    }
   }, [safeArticleId]);
 
   return (
