@@ -210,12 +210,29 @@ export default function Home() {
                 className={`${styles.card} ${isLarge ? styles.cardLarge : ""}`}
                 key={articleNum}
               >
-                <div
-                  className={`${styles.cardImage} ${
-                    isLarge ? styles.cardLargeImage : ""
-                  }`}
-                  style={{ background: gradients[gradientNum] }}
-                />
+                {(() => {
+                  // 50% chance to use a random image from 1.png to 8.png, otherwise use gradient
+                  const useImage = Math.random() < 0.5;
+                  const imgNum = Math.floor(Math.random() * 8) + 1;
+                  const imgSrc = `/` + imgNum + `.png`;
+                  if (useImage) {
+                    return (
+                      <div
+                        className={`${styles.cardImage} ${isLarge ? styles.cardLargeImage : ""}`}
+                        style={{
+                          background: `url(${imgSrc}) center/cover no-repeat, ${gradients[gradientNum]}`,
+                        }}
+                      />
+                    );
+                  } else {
+                    return (
+                      <div
+                        className={`${styles.cardImage} ${isLarge ? styles.cardLargeImage : ""}`}
+                        style={{ background: gradients[gradientNum] }}
+                      />
+                    );
+                  }
+                })()}
                 <div style={{ textAlign: "center" }}>
                   <h3
                     style={{

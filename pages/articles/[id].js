@@ -6,8 +6,10 @@ import { useEffect, useState, useMemo } from "react";
 import { Text, Paper, Image } from "@mantine/core";
 
 const DEFAULT_SITE_ORIGIN = "https://branchmaster.news";
-const ARTICLE_IMAGE_URL =
-  "https://images.unsplash.com/photo-1712839398257-8f7ee9127998?auto=format&fit=crop&w=800&h=400";
+const ARTICLE_IMAGE_URL = (() => {
+  const imgNum = Math.floor(Math.random() * 8) + 1;
+  return `/${imgNum}.png`;
+})();
 const ARTICLE_DESCRIPTION =
   "Practical guidance for configuring, testing, and maintaining a sustainable digital paywall experience.";
 const PUBLISHER_NAME = "Branch Master News";
