@@ -143,10 +143,16 @@ export default function Home() {
             keatsLines[Math.floor(Math.random() * keatsLines.length)];
           return (
             <Link href="/articles/1" className={styles.heroArticle}>
-              <div
-                className={styles.heroImage}
-                style={{ background: gradients[0] }}
-              />
+              {(() => {
+                const heroImgNum = Math.floor(Math.random() * 10);
+                const heroImgSrc = `/${heroImgNum}.png`;
+                return (
+                  <div
+                    className={styles.heroImage}
+                    style={{ background: `url(${heroImgSrc}) center/cover no-repeat` }}
+                  />
+                );
+              })()}
               <h2
                 style={{
                   fontFamily: "Georgia, serif",
@@ -185,7 +191,7 @@ export default function Home() {
           <Link href="/articles/axate-integration" className={styles.card}>
             <div
               className={styles.cardImage}
-              style={{ background: gradients[1] }}
+              style={{ background: 'url(/ai.png) center/cover no-repeat' }}
             />
             <div className={styles.cardContent}>
               <h3 className={styles.cardTitle}>Axate Wallet Integration</h3>
@@ -211,27 +217,17 @@ export default function Home() {
                 key={articleNum}
               >
                 {(() => {
-                  // 50% chance to use a random image from 1.png to 8.png, otherwise use gradient
-                  const useImage = Math.random() < 0.5;
-                  const imgNum = Math.floor(Math.random() * 8) + 1;
-                  const imgSrc = `/` + imgNum + `.png`;
-                  if (useImage) {
-                    return (
-                      <div
-                        className={`${styles.cardImage} ${isLarge ? styles.cardLargeImage : ""}`}
-                        style={{
-                          background: `url(${imgSrc}) center/cover no-repeat, ${gradients[gradientNum]}`,
-                        }}
-                      />
-                    );
-                  } else {
-                    return (
-                      <div
-                        className={`${styles.cardImage} ${isLarge ? styles.cardLargeImage : ""}`}
-                        style={{ background: gradients[gradientNum] }}
-                      />
-                    );
-                  }
+                  // Use the last digit of the article number for the image
+                  const lastDigit = articleNum % 10;
+                  const imgSrc = `/${lastDigit}.png`;
+                  return (
+                    <div
+                      className={`${styles.cardImage} ${isLarge ? styles.cardLargeImage : ""}`}
+                      style={{
+                        background: `url(${imgSrc}) center/cover no-repeat`,
+                      }}
+                    />
+                  );
                 })()}
                 <div style={{ textAlign: "center" }}>
                   <h3
