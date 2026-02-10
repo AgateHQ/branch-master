@@ -33,10 +33,12 @@ export default function MyApp({ Component, pageProps }) {
   return (
     <div className="app-container">
       <MantineProvider theme={theme}>
-        <Script
-          src={enviroment === "live" ? axateScriptLive : axateScriptStaging}
-        />
-        <Component {...pageProps} />
+        <div className="light-wrapper">
+          <Script
+            src={enviroment === "live" ? axateScriptLive : axateScriptStaging}
+          />
+          <Component {...pageProps} />
+        </div>
       </MantineProvider>
     </div>
   );
