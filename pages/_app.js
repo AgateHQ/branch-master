@@ -1,43 +1,42 @@
 import Script from "next/script";
-import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { createTheme, MantineProvider } from "@mantine/core";
+import "@mantine/core/styles.css";
+import { useAxateEnvironment } from "../components/AxateEnvironment";
 import "../styles/globals.css";
 
-export default function MyApp({ Component, pageProps }) {
-  const theme = createTheme({
-    /** Put your mantine theme override here */
-  });
+const theme = createTheme({});
 
-  const [enviroment, setEnviroment] = useState("");
-  const [localStorageReady, setLocalStorageReady] = useState(false);
+const AXATE_SCRIPTS = {
+  staging: "https://wallet-staging.axate.io/bundle.js",
+  live: "https://wallet.axate.io/bundle.js",
+};
 
-  let axateScriptStaging = "https://wallet-staging.axate.io/bundle.js";
-  let axateScriptLive = "https://wallet.axate.io/bundle.js";
-  let axateScriptLocal = "http://localhost:3000/bundle.js";
-
-  useEffect(() => {
-    const storedValue = localStorage.getItem("selectedEnviroment");
-    if (storedValue) {
-      setEnviroment(storedValue);
-    }
-    setLocalStorageReady(true);
-  }, []);
-
-  console.log(enviroment);
-
-  if (!localStorageReady) {
-    return <div>Loading Branch Master...</div>;
-  }
+function AppContent({ Component, pageProps }) {
+  const { environment } = useAxateEnvironment();
+  const [walletStatus, setWalletStatus] = useState("loading");
 
   return (
     <div className="app-container">
-      <MantineProvider theme={theme}>
-        <Script
-          src={enviroment === "live" ? axateScriptLive : axateScriptStaging}
-        />
-        <Component {...pageProps} />
-      </MantineProvider>
+      <Script
+        id={`axate-wallet-${environment}`}
+        src={AXATE_SCRIPTS[environment]}
+        strategy="afterInteractive"
+        onLoad={() => setWalletStatus("ready")}
+        onError={() => setWalletStatus("unavailable")}
+      />
+      <p className="wallet-status" role="status" aria-live="polite">
+        Axate wallet: {walletStatus}
+      </p>
+      <Component {...pageProps} />
     </div>
+  );
+}
+
+export default function MyApp(props) {
+  return (
+    <MantineProvider theme={theme}>
+      <AppContent {...props} />
+    </MantineProvider>
   );
 }

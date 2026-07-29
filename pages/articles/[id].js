@@ -2,34 +2,39 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import styles from "../../styles/Article.module.css";
 import Link from "next/link";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useMemo, useSyncExternalStore } from "react";
 import { Text, Paper, Image } from "@mantine/core";
 
 const DEFAULT_SITE_ORIGIN = "https://branchmaster.news";
-const ARTICLE_IMAGE_URL = (() => {
-  const imgNum = Math.floor(Math.random() * 8) + 1;
-  return `/${imgNum}.png`;
-})();
 const ARTICLE_DESCRIPTION =
   "Practical guidance for configuring, testing, and maintaining a sustainable digital paywall experience.";
 const PUBLISHER_NAME = "Branch Master News";
 const AUTHOR_NAME = "Branch Master Editorial Team";
 
+function subscribeToLocation() {
+  return () => {};
+}
+
+function useBrowserUrl() {
+  return useSyncExternalStore(
+    subscribeToLocation,
+    () => window.location.href,
+    () => "",
+  );
+}
+
 function Article() {
   // Handler for random article navigation
   const goToRandomArticle = () => {
-    const randomId = Math.floor(Math.random() * 42691); // 0 to 42690 inclusive
+    const randomValues = new Uint32Array(1);
+    window.crypto.getRandomValues(randomValues);
+    const randomId = randomValues[0] % 42691;
     router.push(`/articles/${randomId}`);
   };
   const router = useRouter();
 
-  const [registrationLink, setRegistrationLink] = useState("");
-  const [articleUrl, setArticleUrl] = useState("");
+  const articleUrl = useBrowserUrl();
   const premiumHeights = [750, 1000, 2000, 300];
-  const premiumHeight = useMemo(
-    () => premiumHeights[Math.floor(Math.random() * premiumHeights.length)],
-    [],
-  );
 
   const gradients = [
     "linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)",
@@ -43,6 +48,9 @@ function Article() {
   const articleId = parseInt(router.query.id || "1", 10);
   const safeArticleId =
     Number.isFinite(articleId) && articleId > 0 ? articleId : 1;
+  const articleImageUrl = `/${((safeArticleId - 1) % 8) + 1}.png`;
+  const premiumHeight =
+    premiumHeights[(safeArticleId - 1) % premiumHeights.length];
   const heroGradient = gradients[(safeArticleId - 1) % gradients.length];
   const articleHeadline = `Paywall Implementation Playbook #${safeArticleId}`;
   const articleOrigin = useMemo(() => {
@@ -51,7 +59,7 @@ function Article() {
     }
     try {
       return new URL(articleUrl).origin;
-    } catch (error) {
+    } catch {
       return DEFAULT_SITE_ORIGIN;
     }
   }, [articleUrl]);
@@ -66,6 +74,24 @@ function Article() {
     baseDate.setDate(baseDate.getDate() + (safeArticleId - 1));
     return baseDate.toISOString();
   }, [safeArticleId]);
+  const registrationLink = useMemo(() => {
+    if (!articleUrl) {
+      return "";
+    }
+
+    const currentUrl = new URL(articleUrl);
+    const publisher = currentUrl.hostname.split(".")[0];
+    const environment =
+      window.localStorage.getItem("selectedEnvironment") ||
+      window.localStorage.getItem("selectedEnviroment") ||
+      "staging";
+    const registrationOrigin =
+      environment === "live"
+        ? "https://register.axate.io"
+        : "https://register-staging.axate.io";
+
+    return `${registrationOrigin}/?pub=${publisher}&redirectTo=${encodeURIComponent(articleUrl)}`;
+  }, [articleUrl]);
   const articleSchema = useMemo(
     () => ({
       "@context": "https://schema.org",
@@ -75,7 +101,7 @@ function Article() {
         "@id": canonicalUrl,
       },
       headline: articleHeadline,
-      image: [ARTICLE_IMAGE_URL],
+      image: [`${articleOrigin}${articleImageUrl}`],
       datePublished: publishedDate,
       dateModified: publishedDate,
       author: {
@@ -101,24 +127,14 @@ function Article() {
       inLanguage: "en",
       articleSection: "Features",
     }),
-    [articleHeadline, articleOrigin, canonicalUrl, publishedDate],
+    [
+      articleHeadline,
+      articleImageUrl,
+      articleOrigin,
+      canonicalUrl,
+      publishedDate,
+    ],
   );
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const hostname = window.location.hostname;
-      const subdomain = hostname.split(".")[0];
-      const redirectTo = window.location.href;
-      const env = localStorage.getItem("selectedEnviroment") || "staging";
-      const registerBase =
-        env === "live"
-          ? "https://register.axate.io"
-          : "https://register-staging.axate.io";
-      const link = `${registerBase}/?pub=${subdomain}&redirectTo=${encodeURIComponent(redirectTo)}`;
-      setRegistrationLink(link);
-      setArticleUrl(window.location.href);
-    }
-  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -220,7 +236,8 @@ function Article() {
           {/* Registration button moved below the image */}
           <Image
             className={styles.hero}
-            src={ARTICLE_IMAGE_URL}
+            src={articleImageUrl}
+            alt="Abstract illustration for the article"
             style={{ background: heroGradient }}
           />
           {registrationLink && (

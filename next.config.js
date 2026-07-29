@@ -1,4 +1,7 @@
 module.exports = {
+  turbopack: {
+    root: __dirname,
+  },
   images: {
     remotePatterns: [
       {
@@ -7,8 +10,5 @@ module.exports = {
         port: "",
       },
     ],
-  },
-  experimental: {
-    optimizePackageImports: ["@mantine/core", "@mantine/hooks"],
   },
 };

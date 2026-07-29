@@ -7,15 +7,75 @@ import { buildStaticryptJS } from "staticrypt/cli/helpers.js";
 
 const { encode } = codecModule.init(cryptoEngine);
 
+const MAX_REQUESTS = 10;
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const MAX_HTML_CHARACTERS = 1_500_000;
+const requestLog = new Map();
+
+function getClientAddress(req) {
+  const forwardedFor = req.headers["x-forwarded-for"];
+  if (typeof forwardedFor === "string") {
+    return forwardedFor.split(",")[0].trim();
+  }
+  return req.socket.remoteAddress || "unknown";
+}
+
+function isRateLimited(clientAddress) {
+  const now = Date.now();
+  const recentRequests = (requestLog.get(clientAddress) || []).filter(
+    (timestamp) => now - timestamp < RATE_LIMIT_WINDOW_MS,
+  );
+
+  if (recentRequests.length >= MAX_REQUESTS) {
+    requestLog.set(clientAddress, recentRequests);
+    return true;
+  }
+
+  requestLog.set(clientAddress, [...recentRequests, now]);
+  return false;
+}
+
+function looksLikeHtml(value) {
+  return /<(?:!doctype\s+html|html|head|body)[\s>]/i.test(value);
+}
+
 export default async function handler(req, res) {
+  res.setHeader("Cache-Control", "no-store");
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("Referrer-Policy", "no-referrer");
+
   if (req.method !== "POST") {
+    res.setHeader("Allow", "POST");
     res.status(405).json({ message: "Method not allowed" });
     return;
   }
 
+  if (isRateLimited(getClientAddress(req))) {
+    res.setHeader("Retry-After", "60");
+    res.status(429).json({ message: "Too many encryption requests" });
+    return;
+  }
+
   const { html, password } = req.body || {};
-  if (!html || !password) {
+  if (typeof html !== "string" || typeof password !== "string") {
     res.status(400).json({ message: "Missing html or password" });
+    return;
+  }
+
+  if (!html || !password || password.length > 256) {
+    res.status(400).json({ message: "Invalid html or password" });
+    return;
+  }
+
+  if (html.length > MAX_HTML_CHARACTERS) {
+    res.status(413).json({ message: "HTML file is too large" });
+    return;
+  }
+
+  if (!looksLikeHtml(html)) {
+    res
+      .status(400)
+      .json({ message: "Uploaded content must be an HTML document" });
     return;
   }
 
@@ -71,7 +131,7 @@ export default async function handler(req, res) {
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: "10mb",
+      sizeLimit: "2mb",
     },
   },
 };

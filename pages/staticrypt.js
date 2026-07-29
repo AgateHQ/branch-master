@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "../styles/Article.module.css";
 
 function generateSecurePassword(length = 16) {
@@ -13,10 +13,6 @@ export default function StaticryptPage() {
   const [fileContent, setFileContent] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setPassword(generateSecurePassword());
-  }, []);
 
   const handleGeneratePassword = () => {
     setPassword(generateSecurePassword());
