@@ -1,0 +1,10 @@
+/* Positioning context for the next/image `fill` child. The frame itself gets
+   its height from whichever Home/Article module class the caller passes in. */
+.frame {
+  position: relative;
+  overflow: hidden;
+}
+
+.image {
+  object-fit: cover;
+}

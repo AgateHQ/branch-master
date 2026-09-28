@@ -85,15 +85,42 @@ npm audit
 ## Project layout
 
 ```text
-components/            Reusable Axate environment UI and state
+components/            Reusable UI: environment state and selector, cards, images
+  AxateEnvironment.js  External store for the environment, incl. legacy-key migration
+  SelectEnvironment.js Accessible staging/live selector
+  CoverImage.js        next/image wrapper: fixed-height, cover-cropped frame
+  ArticleCard.js       One index-grid card
+  HeroArticle.js       The pinned hero article at the top of the index
+data/articles.js       The article catalogue — edit this to change content
 pages/                 Next.js Pages Router pages and API routes
   articles/[id].js     Main generated paywall scenario
   api/encrypt.js       Server-side Staticrypt endpoint
 lib/                   Staticrypt HTML template
-public/                Sample article images and static assets
-styles/                Global, index, and article styles
+public/                WebP sample article covers and static assets
+styles/                Global, index, card, and article styles
 tests/e2e/              Playwright browser and API scenarios
 ```
+
+### Changing the articles
+
+`data/articles.js` is the single source of truth for the index. Edit it to
+change how many articles exist, which card is the hero, which cards render
+double-width (`FEATURED_ARTICLE_IDS`), or the blurb copy. The index page, the
+grid, and the article page's cover image all derive from it — no page edits
+required.
+
+### Images
+
+All covers ship as WebP in `public/` (`article-0.webp` … `article-9.webp`,
+plus `axate-logo.webp`) and are rendered through `next/image` via
+`components/CoverImage.js`, which produces a responsive `srcset` and negotiates
+AVIF/WebP. Article ids map onto the ten covers with `articleImageSrc(id)`,
+so any id — not just the ones in the catalogue — resolves to a real image.
+
+The raw PNGs this fixture used to ship totalled ~20 MB. Keeping WebP masters
+plus the optimizer brings a full index-page image payload to roughly 220 KB.
+If you replace a cover, export it at 1536×1024 and convert it with
+`cwebp -q 80 in.png -o article-N.webp`.
 
 The encryption API accepts HTML documents up to 1.5 million characters, limits
 request bodies to 2 MB, and applies a lightweight per-instance rate limit. A

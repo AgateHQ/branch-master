@@ -40,9 +40,11 @@ body {
   box-sizing: border-box;
 }
 
+/* Images are sized by their own component. Only guard against overflow here —
+   an earlier blanket `height: 200px` rule silently overrode every image's
+   intended height, so avoid reintroducing one. */
 .app-container img {
   max-width: 100%;
-  height: auto;
 }
 
 .app-container h1,
@@ -60,8 +62,4 @@ body {
 .app-container button {
   padding: 0.5rem 1rem;
   font-weight: bold;
-}
-
-.app-container img {
-  height: 200px;
 }

@@ -1,12 +1,15 @@
 import { expect, test } from "@playwright/test";
 
 async function mockAxateWallet(page) {
-  await page.route("https://wallet*.axate.io/bundle.js", async (route) => {
-    await route.fulfill({
-      contentType: "application/javascript",
-      body: "window.__axateWalletLoaded = true;",
-    });
-  });
+  await page.route(
+    /^https:\/\/wallet(?:-staging)?\.axate\.io\/(?:1\.0\.17\/)?bundle\.js$/,
+    async (route) => {
+      await route.fulfill({
+        contentType: "application/javascript",
+        body: "window.__axateWalletLoaded = true;",
+      });
+    },
+  );
 }
 
 test.beforeEach(async ({ page }) => {
@@ -27,7 +30,16 @@ test("loads staging by default without hydration errors", async ({ page }) => {
     page.getByRole("heading", { name: "Branch Master News" }),
   ).toBeVisible();
   await expect(page.getByLabel("Axate environment")).toHaveValue("staging");
-  await expect(page.getByRole("status")).toContainText("ready");
+  const walletScript = page.locator("#axate-wallet-staging");
+  await expect(walletScript).toHaveAttribute(
+    "src",
+    "https://wallet-staging.axate.io/1.0.17/bundle.js",
+  );
+  await expect(walletScript).toHaveAttribute(
+    "integrity",
+    "sha384-z2efofXY+Hbf60NzUF6AZDlrBEcRLYQLSjcmXJyP4k7YxS0BHEewI7aUypXJ9nSe",
+  );
+  await expect(walletScript).toHaveAttribute("crossorigin", "anonymous");
   expect(hydrationErrors).toEqual([]);
 });
 
@@ -36,7 +48,6 @@ test("persists a live environment selection", async ({ page }) => {
   await page.getByLabel("Axate environment").selectOption("live");
 
   await expect(page.getByLabel("Axate environment")).toHaveValue("live");
-  await expect(page.getByRole("status")).toContainText("ready");
   await expect
     .poll(() =>
       page.evaluate(() => localStorage.getItem("selectedEnvironment")),

@@ -3,13 +3,26 @@ import { useRouter } from "next/router";
 import styles from "../../styles/Article.module.css";
 import Link from "next/link";
 import { useEffect, useMemo, useSyncExternalStore } from "react";
-import { Text, Paper, Image } from "@mantine/core";
+import { Text, Paper } from "@mantine/core";
+import CoverImage from "../../components/CoverImage";
+import { AXATE_LOGO_SRC, articleImageSrc } from "../../data/articles";
 
 const DEFAULT_SITE_ORIGIN = "https://branchmaster.news";
 const ARTICLE_DESCRIPTION =
   "Practical guidance for configuring, testing, and maintaining a sustainable digital paywall experience.";
 const PUBLISHER_NAME = "Branch Master News";
 const AUTHOR_NAME = "Branch Master Editorial Team";
+
+// Rotates the paywall height and hero gradient by article id.
+const PREMIUM_HEIGHTS = [750, 1000, 2000, 300];
+const HERO_GRADIENTS = [
+  "linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)",
+  "linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)",
+  "linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%)",
+  "linear-gradient(135deg, #fdcbf1 0%, #e6dee9 100%)",
+  "linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)",
+  "linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%)",
+];
 
 function subscribeToLocation() {
   return () => {};
@@ -24,6 +37,8 @@ function useBrowserUrl() {
 }
 
 function Article() {
+  const router = useRouter();
+
   // Handler for random article navigation
   const goToRandomArticle = () => {
     const randomValues = new Uint32Array(1);
@@ -31,27 +46,17 @@ function Article() {
     const randomId = randomValues[0] % 42691;
     router.push(`/articles/${randomId}`);
   };
-  const router = useRouter();
 
   const articleUrl = useBrowserUrl();
-  const premiumHeights = [750, 1000, 2000, 300];
-
-  const gradients = [
-    "linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)",
-    "linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)",
-    "linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%)",
-    "linear-gradient(135deg, #fdcbf1 0%, #e6dee9 100%)",
-    "linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)",
-    "linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%)",
-  ];
 
   const articleId = parseInt(router.query.id || "1", 10);
   const safeArticleId =
     Number.isFinite(articleId) && articleId > 0 ? articleId : 1;
-  const articleImageUrl = `/${((safeArticleId - 1) % 8) + 1}.png`;
+  const articleImageUrl = articleImageSrc(safeArticleId);
   const premiumHeight =
-    premiumHeights[(safeArticleId - 1) % premiumHeights.length];
-  const heroGradient = gradients[(safeArticleId - 1) % gradients.length];
+    PREMIUM_HEIGHTS[(safeArticleId - 1) % PREMIUM_HEIGHTS.length];
+  const heroGradient =
+    HERO_GRADIENTS[(safeArticleId - 1) % HERO_GRADIENTS.length];
   const articleHeadline = `Paywall Implementation Playbook #${safeArticleId}`;
   const articleOrigin = useMemo(() => {
     if (!articleUrl) {
@@ -114,7 +119,7 @@ function Article() {
         url: articleOrigin,
         logo: {
           "@type": "ImageObject",
-          url: `${articleOrigin}/ai.png`,
+          url: `${articleOrigin}${AXATE_LOGO_SRC}`,
         },
       },
       description: ARTICLE_DESCRIPTION,
@@ -234,10 +239,13 @@ function Article() {
         >
           <h1 className={styles.title}>{articleHeadline}</h1>
           {/* Registration button moved below the image */}
-          <Image
+          <CoverImage
             className={styles.hero}
             src={articleImageUrl}
             alt="Abstract illustration for the article"
+            sizes="(max-width: 752px) 100vw, 688px"
+            eager
+            fetchPriority="high"
             style={{ background: heroGradient }}
           />
           {registrationLink && (

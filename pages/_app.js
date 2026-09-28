@@ -8,9 +8,12 @@ import "../styles/globals.css";
 const theme = createTheme({});
 
 const AXATE_SCRIPTS = {
-  staging: "https://wallet-staging.axate.io/bundle.js",
+  staging: "https://wallet-staging.axate.io/1.0.17/bundle.js",
   live: "https://wallet.axate.io/bundle.js",
 };
+
+const AXATE_STAGING_INTEGRITY =
+  "sha384-z2efofXY+Hbf60NzUF6AZDlrBEcRLYQLSjcmXJyP4k7YxS0BHEewI7aUypXJ9nSe";
 
 function AppContent({ Component, pageProps }) {
   const { environment } = useAxateEnvironment();
@@ -21,6 +24,10 @@ function AppContent({ Component, pageProps }) {
       <Script
         id={`axate-wallet-${environment}`}
         src={AXATE_SCRIPTS[environment]}
+        integrity={
+          environment === "staging" ? AXATE_STAGING_INTEGRITY : undefined
+        }
+        crossOrigin={environment === "staging" ? "anonymous" : undefined}
         strategy="afterInteractive"
         onLoad={() => setWalletStatus("ready")}
         onError={() => setWalletStatus("unavailable")}

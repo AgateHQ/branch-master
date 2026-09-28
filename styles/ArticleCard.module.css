@@ -1,0 +1,133 @@
+.card {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: #18382f;
+  border: 1px solid #dce4d9;
+  border-radius: 5px;
+  overflow: hidden;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+  background: #fff;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  border-color: #9ab29f;
+  box-shadow: 0 8px 20px #18382f12;
+}
+
+.card:focus-visible {
+  outline: 3px solid #d05b43;
+  outline-offset: 3px;
+}
+
+.featured {
+  grid-column: span 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  min-height: 260px;
+}
+
+.image {
+  width: 100%;
+  height: 220px;
+}
+
+.imageFeatured {
+  height: 100%;
+  min-height: 260px;
+}
+
+.body {
+  min-width: 0;
+  padding: 1rem 1.1rem 1.1rem;
+}
+
+.title {
+  color: #18382f;
+  font-family: "Iowan Old Style", "Baskerville", "Palatino Linotype", serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.titleFeatured {
+  font-size: 1.8rem;
+}
+
+.blurb {
+  display: -webkit-box;
+  overflow: hidden;
+  margin-top: 0.55rem;
+  color: #59665e;
+  font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+@media (max-width: 760px) {
+  .image {
+    height: 180px;
+  }
+
+  .imageFeatured {
+    min-height: 240px;
+  }
+}
+
+@media (max-width: 560px) {
+  .card {
+    display: grid;
+    grid-template-columns: 104px minmax(0, 1fr);
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.75rem 0;
+    border: 0;
+    border-bottom: 1px solid #d8e0d7;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .card:hover {
+    transform: none;
+    border-color: #d8e0d7;
+    box-shadow: none;
+  }
+
+  .featured {
+    grid-column: span 1;
+    grid-template-columns: 104px minmax(0, 1fr);
+    min-height: 0;
+  }
+
+  .image,
+  .imageFeatured {
+    height: 88px;
+    min-height: 88px;
+    border-radius: 4px;
+  }
+
+  .body {
+    padding: 0;
+  }
+
+  .title,
+  .titleFeatured {
+    font-size: 1.08rem;
+    line-height: 1.2;
+  }
+
+  .blurb {
+    margin-top: 0.3rem;
+    font-size: 0.73rem;
+    line-height: 1.4;
+    -webkit-line-clamp: 2;
+  }
+}
