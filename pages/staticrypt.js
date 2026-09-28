@@ -1,3 +1,5 @@
+import Head from "next/head";
+import Link from "next/link";
 import { useState } from "react";
 import styles from "../styles/Article.module.css";
 
@@ -63,11 +65,14 @@ export default function StaticryptPage() {
   };
 
   return (
-    <main className={styles.main}>
-      <div
-        className={styles.article}
-        style={{ padding: "2rem", textAlign: "center" }}
-      >
+    <main id="main-content" tabIndex={-1} className={styles.main}>
+      <Head>
+        <title>Encrypt HTML | Branch Master News</title>
+      </Head>
+      <Link href="/" className={styles.backButton}>
+        ← All stories
+      </Link>
+      <div className={styles.article}>
         <h1 className={styles.title}>Encrypt HTML</h1>
         <p style={{ marginTop: "0.5rem" }}>
           Upload an HTML file and choose a password to generate a
@@ -75,9 +80,17 @@ export default function StaticryptPage() {
           password when opened and includes a "Remember me" option to store it
           for 30 days.
         </p>
-        <input type="file" accept=".html" onChange={handleFileChange} />
+        <label htmlFor="html-file">HTML file</label>
+        <input
+          id="html-file"
+          type="file"
+          accept=".html"
+          onChange={handleFileChange}
+        />
         <div>
+          <label htmlFor="password">Password</label>
           <input
+            id="password"
             type="text"
             value={password}
             onChange={(e) => setPassword(e.target.value)}

@@ -182,56 +182,19 @@ function Article() {
           }}
         />
       </Head>
-      <main className={styles.main}>
-        <div style={{ display: "flex", width: "100%", marginBottom: "1.5rem" }}>
-          <div style={{ width: "50%", paddingRight: "0.5rem" }}>
-            <Link
-              href="/"
-              className={styles.backButton}
-              style={{
-                display: "block",
-                width: "100%",
-                textAlign: "center",
-                background: "linear-gradient(90deg, #fbc2eb 0%, #a18cd1 100%)",
-                borderRadius: "6px",
-                padding: "0.6rem 0",
-                color: "#222",
-                fontFamily: "Georgia, serif",
-                fontSize: "1rem",
-                fontStyle: "italic",
-                textDecoration: "none",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
-                border: "none",
-              }}
-            >
-              ← Back
-            </Link>
-          </div>
-          <div style={{ width: "50%", paddingLeft: "0.5rem" }}>
-            <button
-              type="button"
-              onClick={goToRandomArticle}
-              style={{
-                display: "block",
-                width: "100%",
-                textAlign: "center",
-                background: "linear-gradient(90deg, #a18cd1 0%, #fbc2eb 100%)",
-                border: "none",
-                borderRadius: "6px",
-                padding: "0.6rem 0",
-                color: "#222",
-                fontFamily: "Georgia, serif",
-                fontSize: "1rem",
-                fontStyle: "italic",
-                cursor: "pointer",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
-                transition: "background 0.2s",
-              }}
-            >
-              Go to a Random Article
-            </button>
-          </div>
-        </div>
+      <main id="main-content" tabIndex={-1} className={styles.main}>
+        <nav className={styles.actions} aria-label="Article navigation">
+          <Link href="/" className={styles.backButton}>
+            ← All stories
+          </Link>
+          <button
+            type="button"
+            className={styles.backButton}
+            onClick={goToRandomArticle}
+          >
+            Go to a Random Article
+          </button>
+        </nav>
 
         <div
           className={`article premium ${styles.article}`}
@@ -249,95 +212,14 @@ function Article() {
             style={{ background: heroGradient }}
           />
           {registrationLink && (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                margin: "2rem 0 1.5rem 0",
-              }}
-            >
-              <a
-                href={registrationLink}
-                style={{
-                  display: "inline-block",
-                  padding: "0.85rem 2.8rem",
-                  background:
-                    "linear-gradient(90deg, #43e97b 0%, #38f9d7 100%)",
-                  color: "#fff",
-                  fontWeight: 700,
-                  fontFamily: "Georgia, serif",
-                  fontSize: "1.13rem",
-                  borderRadius: "12px",
-                  boxShadow: "0 4px 18px rgba(67,233,123,0.18)",
-                  textDecoration: "none",
-                  letterSpacing: "0.7px",
-                  border: "none",
-                  textAlign: "center",
-                  transition:
-                    "transform 0.15s, box-shadow 0.15s, background 0.2s",
-                  position: "relative",
-                  overflow: "hidden",
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.background =
-                    "linear-gradient(90deg, #38f9d7 0%, #43e97b 100%)";
-                  e.currentTarget.style.transform =
-                    "translateY(-2px) scale(1.03)";
-                  e.currentTarget.style.boxShadow =
-                    "0 8px 28px rgba(67,233,123,0.22)";
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.background =
-                    "linear-gradient(90deg, #43e97b 0%, #38f9d7 100%)";
-                  e.currentTarget.style.transform = "none";
-                  e.currentTarget.style.boxShadow =
-                    "0 4px 18px rgba(67,233,123,0.18)";
-                }}
-              >
-                <span style={{ position: "relative", zIndex: 2 }}>
-                  Go to new registration
-                </span>
-                <span
-                  style={{
-                    content: '""',
-                    position: "absolute",
-                    left: 0,
-                    top: 0,
-                    width: "100%",
-                    height: "100%",
-                    background:
-                      "linear-gradient(120deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.18) 100%)",
-                    zIndex: 1,
-                    borderRadius: "12px",
-                    pointerEvents: "none",
-                  }}
-                />
+            <div className={styles.registration}>
+              <a href={registrationLink} className={styles.registrationLink}>
+                Go to new registration
               </a>
             </div>
           )}
-          <Paper
-            shadow="xs"
-            p={40}
-            className={styles.content}
-            style={{
-              padding: 40,
-              paddingTop: 48,
-              paddingBottom: 48,
-              paddingLeft: 32,
-              paddingRight: 32,
-              maxWidth: 720,
-              margin: "0 auto",
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Georgia, serif",
-                fontSize: "1.32rem",
-                color: "#2d2d2d",
-                marginBottom: "1.6rem",
-                lineHeight: 1.7,
-              }}
-            >
+          <Paper className={styles.content}>
+            <Text className={styles.paragraph}>
               Effective paywalls start with clear objectives. Define the revenue
               or engagement target you are solving for, document your existing
               conversion funnel, and benchmark metrics like engaged uniques,
@@ -353,30 +235,14 @@ function Article() {
                 background: "linear-gradient(90deg, #a1c4fd 0%, #c2e9fb 100%)",
               }}
             />
-            <Text
-              style={{
-                fontFamily: "Georgia, serif",
-                fontSize: "1.32rem",
-                color: "#2d2d2d",
-                marginBottom: "1.6rem",
-                lineHeight: 1.7,
-              }}
-            >
+            <Text className={styles.paragraph}>
               Audit your content library and map pieces to access tiers. Decide
               which categories stay free, which get metered, and which require
               hard stops. For metered walls, configure preview components (such
               as the premium height setting above) so readers see enough value
               to justify subscribing without giving the full story away.
             </Text>
-            <Text
-              style={{
-                fontFamily: "Georgia, serif",
-                fontSize: "1.32rem",
-                color: "#2d2d2d",
-                marginBottom: "1.6rem",
-                lineHeight: 1.7,
-              }}
-            >
+            <Text className={styles.paragraph}>
               Streamline the registration journey that follows the paywall.
               Prefill email fields when possible, minimize the number of
               required inputs, and offer wallet, SSO, or reader-revenue platform
@@ -392,29 +258,13 @@ function Article() {
                 background: "linear-gradient(90deg, #fbc2eb 0%, #a6c1ee 100%)",
               }}
             />
-            <Text
-              style={{
-                fontFamily: "Georgia, serif",
-                fontSize: "1.32rem",
-                color: "#2d2d2d",
-                marginBottom: "1.6rem",
-                lineHeight: 1.7,
-              }}
-            >
+            <Text className={styles.paragraph}>
               Invest in messaging around the wall. Use the in-page notice
               element to explain the value of membership, surface key benefits
               like ad-light experiences or subscriber-only newsletters, and
               localize the copy so it reflects the reader’s region and currency.
             </Text>
-            <Text
-              style={{
-                fontFamily: "Georgia, serif",
-                fontSize: "1.32rem",
-                color: "#2d2d2d",
-                marginBottom: "1.6rem",
-                lineHeight: 1.7,
-              }}
-            >
+            <Text className={styles.paragraph}>
               Treat pricing and access rules as experiments. Run controlled
               tests that vary free-article counts, introductory offers, and
               headline copy, and feed results into an optimization backlog so
@@ -429,29 +279,13 @@ function Article() {
                 background: "linear-gradient(90deg, #d4fc79 0%, #96e6a1 100%)",
               }}
             />
-            <Text
-              style={{
-                fontFamily: "Georgia, serif",
-                fontSize: "1.32rem",
-                color: "#2d2d2d",
-                marginBottom: "1.6rem",
-                lineHeight: 1.7,
-              }}
-            >
+            <Text className={styles.paragraph}>
               Plan for technical resilience. Cache paywall configuration
               responses, set sane timeouts to avoid blocking article renders,
               and provide a fallback state that reverts to metered access if
               your payment provider has an outage.
             </Text>
-            <Text
-              style={{
-                fontFamily: "Georgia, serif",
-                fontSize: "1.32rem",
-                color: "#2d2d2d",
-                marginBottom: "1.6rem",
-                lineHeight: 1.7,
-              }}
-            >
+            <Text className={styles.paragraph}>
               After launch, monitor the entire customer lifecycle. Share
               dashboards with editorial leads, funnel user feedback into support
               workflows, and schedule quarterly reviews of churn, reactivation,
@@ -466,15 +300,7 @@ function Article() {
                 background: "linear-gradient(90deg, #fa709a 0%, #fee140 100%)",
               }}
             />
-            <Text
-              style={{
-                fontFamily: "Georgia, serif",
-                fontSize: "1.32rem",
-                color: "#2d2d2d",
-                marginBottom: "1.6rem",
-                lineHeight: 1.7,
-              }}
-            >
+            <Text className={styles.paragraph}>
               Celebrate wins, but keep iterating. Pair qualitative interviews
               with quantitative dashboards so you understand the “why” behind
               conversion changes and can prioritize the next round of paywall

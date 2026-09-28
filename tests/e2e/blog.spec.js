@@ -97,3 +97,43 @@ test("validates and encrypts uploaded HTML", async ({ request }) => {
   );
   expect(await encryptedResponse.text()).toContain("Protected Page");
 });
+
+for (const width of [320, 390, 768, 1280]) {
+  test(`pages fit a ${width}px viewport`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 844 });
+    for (const route of [
+      "/",
+      "/articles/1",
+      "/articles/2",
+      "/articles/axate-integration",
+      "/staticrypt",
+    ]) {
+      await page.goto(route);
+      await expect(page.locator("main")).toBeVisible();
+      expect(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth,
+        ),
+      ).toBe(true);
+    }
+  });
+}
+
+test("mobile navigation and keyboard skip link work", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await page.waitForFunction(() => window.next?.router?.isReady);
+  await page.getByRole("link", { name: "Skip to content" }).focus();
+  await expect(
+    page.getByRole("link", { name: "Skip to content" }),
+  ).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page.locator("main")).toBeFocused();
+  await page.getByRole("link", { name: "Latest stories", exact: true }).click();
+  await expect(page.locator("#latest-heading")).toBeInViewport();
+  const select = await page.getByLabel("Axate environment").boundingBox();
+  expect(select.height).toBeGreaterThanOrEqual(44);
+  await page.getByRole("link", { name: "Encrypt HTML", exact: true }).click();
+  await expect(page.getByLabel("HTML file")).toBeVisible();
+  await expect(page.getByLabel("Password", { exact: true })).toBeVisible();
+});

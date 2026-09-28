@@ -1,3 +1,4 @@
+import Head from "next/head";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import hljs from "highlight.js";
@@ -40,16 +41,23 @@ export default function AxateIntegration() {
     `<p class="non-premium">\n  This content is visible to everyone again\n</p>`;
 
   return (
-    <main className={styles.main}>
+    <main id="main-content" tabIndex={-1} className={styles.main}>
+      <Head>
+        <title>Axate integration guide | Branch Master News</title>
+      </Head>
       <Link href="/" className={styles.backButton}>
-        \u2190 Back
+        ← All stories
       </Link>
       <div className={styles.article}>
         <h1 className={styles.title}>Integrating the Axate Wallet</h1>
         <p className={styles.articleParagraph}>
           Use the following snippet to add the Axate wallet to your site:
         </p>
-        <pre className={styles.codeSnippet}>
+        <pre
+          tabIndex={0}
+          aria-label="Axate integration code"
+          className={styles.codeSnippet}
+        >
           <code ref={codeRef} className="language-html">
             {snippet}
           </code>

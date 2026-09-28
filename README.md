@@ -135,3 +135,17 @@ The environment selector controls which remote services the browser uses:
 | ----------- | ----------------------------------- | --------------------------- |
 | Staging     | `wallet-staging.axate.io/bundle.js` | `register-staging.axate.io` |
 | Live        | `wallet.axate.io/bundle.js`         | `register.axate.io`         |
+
+### Mobile usability
+
+Layouts start with a single column and expand at 40rem and 60rem. The index follows the Ghost demo’s layout: a compact white header, left-aligned site
+identity, a thumbnail lead story, two featured cards, and a borderless story grid.
+Cards stack with full-width images on phones; responsive image sizes follow
+those layouts.
+Article text and spacing scale with the viewport. Navigation and form controls
+have at least 44px touch targets, and keyboard users can skip to the main content.
+Motion respects the system reduced-motion preference. The wallet status appears
+in normal document flow so it does not cover reading or wallet controls.
+
+The browser suite checks every page at 320, 390, 768, and 1280px, as well as
+keyboard skip navigation, mobile story navigation, and labelled utility inputs.

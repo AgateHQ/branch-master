@@ -35,6 +35,9 @@ function AppContent({ Component, pageProps }) {
       <p className="wallet-status" role="status" aria-live="polite">
         Axate wallet: {walletStatus}
       </p>
+      <a href="#main-content" className="skip-link">
+        Skip to content
+      </a>
       <Component {...pageProps} />
     </div>
   );

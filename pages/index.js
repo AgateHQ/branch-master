@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import SelectEnvironment from "../components/SelectEnvironment";
@@ -20,36 +21,41 @@ export default function Home() {
 
       <header className={styles.header}>
         <div className={`${styles.headerRow} ${styles.shell}`}>
-          <div className={styles.brand}>
-            <p className={styles.kicker}>Stories for curious minds</p>
-            <h1 className={styles.title}>Branch Master News</h1>
-            <p className={styles.tagline}>
-              A new chapter in digital storytelling.
-            </p>
-          </div>
+          <nav className={styles.navigation} aria-label="Main navigation">
+            <Link href="/" aria-current="page">
+              Home
+            </Link>
+            <a href="#latest-heading">Latest stories</a>
+            <Link href="/articles/axate-integration">Axate guide</Link>
+            <Link href="/staticrypt">Encrypt HTML</Link>
+          </nav>
           <div className={styles.environment}>
-            <span className={styles.environmentLabel}>Wallet environment</span>
+            <span className={styles.environmentLabel}>Wallet</span>
             <SelectEnvironment />
           </div>
         </div>
+        <div className={`${styles.brand} ${styles.shell}`}>
+          <h1 className={styles.title}>Branch Master News</h1>
+          <p className={styles.tagline}>
+            A new chapter in digital storytelling.
+          </p>
+        </div>
       </header>
 
-      <main className={`${styles.main} ${styles.shell}`}>
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className={`${styles.main} ${styles.shell}`}
+      >
         <section aria-label="Lead story">
           <HeroArticle article={HERO_ARTICLE} />
         </section>
 
-        <div className={styles.ads}>
-          <span className={styles.adLabel}>Advertisement</span>
-          <p>
-            &quot;In the garden of commerce, bright banners bloom—whispers of
-            want in the marketplace of dreams.&quot;
-          </p>
-        </div>
-
         <section className={styles.latest} aria-labelledby="latest-heading">
           <div className={styles.sectionHeading}>
-            <h2 id="latest-heading">Latest stories</h2>
+            <h2 id="latest-heading" tabIndex={-1}>
+              Latest stories
+            </h2>
             <span>More from Branch Master</span>
           </div>
           <div className={styles.grid}>
@@ -61,6 +67,7 @@ export default function Home() {
         </section>
 
         <footer className={styles.footer}>
+          <Link href="/">Branch Master News</Link>
           <p className={styles.version}>
             Current Version: {process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_MESSAGE}
           </p>

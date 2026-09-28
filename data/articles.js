@@ -47,7 +47,7 @@ export const ARTICLE_COUNT = 30;
 export const HERO_ARTICLE_ID = 1;
 
 // Ids that render as double-width cards in the index grid.
-export const FEATURED_ARTICLE_IDS = new Set([2, 9, 16, 23, 30]);
+export const FEATURED_ARTICLE_IDS = new Set([2]);
 
 export const AXATE_LOGO_SRC = "/axate-logo.webp";
 
@@ -71,6 +71,7 @@ export const ARTICLES = Array.from({ length: ARTICLE_COUNT }, (_, index) => {
     id,
     href: `/articles/${id}`,
     title: `Article #${id}`,
+    category: "Stories",
     blurb: KEATS_LINES[index % KEATS_LINES.length],
     image: articleImageSrc(id),
     isHero: id === HERO_ARTICLE_ID,
@@ -86,6 +87,8 @@ export const GRID_ARTICLES = ARTICLES.filter((article) => !article.isHero);
 export const INTEGRATION_CARD = {
   href: "/articles/axate-integration",
   title: "Axate Wallet Integration",
+  category: "Getting started",
+  isFeatured: true,
   blurb: "Learn how to embed the Axate wallet.",
   image: AXATE_LOGO_SRC,
 };

@@ -2,8 +2,10 @@ import Link from "next/link";
 import CoverImage from "./CoverImage";
 import styles from "../styles/ArticleCard.module.css";
 
-const NORMAL_CARD_SIZES = "(max-width: 600px) 100vw, 304px";
-const FEATURED_CARD_SIZES = "(max-width: 600px) 100vw, 632px";
+const NORMAL_CARD_SIZES =
+  "(max-width: 639px) calc(100vw - 32px), (max-width: 959px) calc((100vw - 94px) / 2), (max-width: 1263px) calc((100vw - 124px) / 3), 380px";
+const FEATURED_CARD_SIZES =
+  "(max-width: 639px) calc(100vw - 32px), (max-width: 1263px) calc((100vw - 94px) / 2), 585px";
 
 /**
  * One card in the index grid.
@@ -39,6 +41,12 @@ export default function ArticleCard({ article, preload = false }) {
         preload={preload}
       />
       <div className={styles.body}>
+        <div className={styles.eyebrow}>
+          <span>{article.category}</span>
+          {article.isFeatured && (
+            <span className={styles.featuredLabel}>Featured</span>
+          )}
+        </div>
         <h3 className={titleClassName}>{article.title}</h3>
         <p className={styles.blurb}>{article.blurb}</p>
       </div>

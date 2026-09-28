@@ -2,7 +2,7 @@ import Link from "next/link";
 import CoverImage from "./CoverImage";
 import styles from "../styles/Home.module.css";
 
-/** The large pinned article at the top of the index. */
+/** The compact pinned article at the top of the index. */
 export default function HeroArticle({ article }) {
   return (
     <Link href={article.href} className={styles.heroArticle}>
@@ -10,7 +10,7 @@ export default function HeroArticle({ article }) {
         src={article.image}
         alt=""
         className={styles.heroImage}
-        sizes="(max-width: 992px) 100vw, 960px"
+        sizes="(max-width: 639px) 88px, 240px"
         preload
       />
       <div className={styles.heroCopy}>
