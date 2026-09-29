@@ -53,13 +53,19 @@ automatically. If no value has been selected, the app uses staging.
 | ----------------------------- | --------------------------------------------------- |
 | `/`                           | Synthetic blog index and Axate environment selector |
 | `/articles/:id`               | Generated premium article; odd IDs use button mode  |
-| `/articles/axate-integration` | Example Axate embed markup                          |
+| `/articles/axate-integration` | Redirect to Axate installation instructions         |
 | `/staticrypt`                 | Upload and password-protect an HTML file            |
 | `/api/encrypt`                | POST endpoint used by the Staticrypt page           |
 
 The Axate integration depends on the markup in `pages/_document.js` and the
 `.premium` and `.axate-notice` selectors used by article pages. See
 `pages/articles/[id].js` for the primary test scenario.
+
+Page links use native anchors and the random-article button uses
+`window.location.assign` to load a fresh document. This lets the Axate wallet
+initialize on every page instead of retaining state across Next.js client-side
+transitions. Keep this behaviour when adding navigation; in-page anchor links
+(such as “Latest stories”) still scroll without reloading.
 
 ## Commands
 

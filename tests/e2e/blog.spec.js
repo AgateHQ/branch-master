@@ -101,13 +101,7 @@ test("validates and encrypts uploaded HTML", async ({ request }) => {
 for (const width of [320, 390, 768, 1280]) {
   test(`pages fit a ${width}px viewport`, async ({ page }) => {
     await page.setViewportSize({ width, height: 844 });
-    for (const route of [
-      "/",
-      "/articles/1",
-      "/articles/2",
-      "/articles/axate-integration",
-      "/staticrypt",
-    ]) {
+    for (const route of ["/", "/articles/1", "/articles/2", "/staticrypt"]) {
       await page.goto(route);
       await expect(page.locator("main")).toBeVisible();
       expect(
@@ -136,4 +130,63 @@ test("mobile navigation and keyboard skip link work", async ({ page }) => {
   await page.getByRole("link", { name: "Encrypt HTML", exact: true }).click();
   await expect(page.getByLabel("HTML file")).toBeVisible();
   await expect(page.getByLabel("Password", { exact: true })).toBeVisible();
+});
+
+test("story links and random navigation load fresh documents", async ({
+  page,
+}) => {
+  await page.goto("/");
+
+  async function expectDocumentNavigation(control, url) {
+    await page.evaluate(() => {
+      window.__previousDocument = true;
+    });
+    await Promise.all([
+      page.waitForEvent(
+        "request",
+        (request) =>
+          request.isNavigationRequest() && request.frame() === page.mainFrame(),
+      ),
+      control.click(),
+    ]);
+    await page.waitForURL(url);
+    await expect
+      .poll(() => page.evaluate(() => window.__previousDocument))
+      .toBeUndefined();
+    await expect(page.locator("#axate-wallet-staging")).toHaveCount(1);
+  }
+
+  await expectDocumentNavigation(
+    page
+      .locator('a[href^="/articles/"]')
+      .filter({ hasText: "Read story" })
+      .first(),
+    /\/articles\/\d+$/,
+  );
+  await expectDocumentNavigation(
+    page.getByRole("link", { name: "All stories" }),
+    /\/$/,
+  );
+  await expectDocumentNavigation(
+    page.locator('a[href="/articles/2"]').first(),
+    /\/articles\/2$/,
+  );
+  await expect(page.locator("#axate-wallet")).toHaveAttribute(
+    "data-selector-button-mode",
+    "false",
+  );
+  await page.evaluate(() => {
+    window.crypto.getRandomValues = (values) => {
+      values[0] = 3;
+      return values;
+    };
+  });
+  await expectDocumentNavigation(
+    page.getByRole("button", { name: "Go to a Random Article" }),
+    /\/articles\/3$/,
+  );
+  await expect(page.locator("#axate-wallet")).toHaveAttribute(
+    "data-selector-button-mode",
+    "true",
+  );
 });

@@ -1,4 +1,13 @@
 module.exports = {
+  async redirects() {
+    return [
+      {
+        source: "/articles/axate-integration",
+        destination: "https://wallet.axate.io/install.html",
+        permanent: true,
+      },
+    ];
+  },
   turbopack: {
     root: __dirname,
   },

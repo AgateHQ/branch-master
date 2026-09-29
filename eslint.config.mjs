@@ -32,6 +32,8 @@ export default [
       ...nextPlugin.configs.recommended.rules,
       ...nextPlugin.configs["core-web-vitals"].rules,
       ...reactHooks.configs.flat.recommended.rules,
+      // Full-page navigation intentionally resets the external Axate wallet.
+      "@next/next/no-html-link-for-pages": "off",
       "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
       "no-undef": "error",
     },

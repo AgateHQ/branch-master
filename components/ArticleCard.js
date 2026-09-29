@@ -1,4 +1,3 @@
-import Link from "next/link";
 import CoverImage from "./CoverImage";
 import styles from "../styles/ArticleCard.module.css";
 
@@ -32,7 +31,7 @@ export default function ArticleCard({ article, preload = false }) {
     .join(" ");
 
   return (
-    <Link href={article.href} className={className}>
+    <a href={article.href} className={className}>
       <CoverImage
         src={article.image}
         alt=""
@@ -50,6 +49,6 @@ export default function ArticleCard({ article, preload = false }) {
         <h3 className={titleClassName}>{article.title}</h3>
         <p className={styles.blurb}>{article.blurb}</p>
       </div>
-    </Link>
+    </a>
   );
 }

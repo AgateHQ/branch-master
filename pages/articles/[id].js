@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import styles from "../../styles/Article.module.css";
-import Link from "next/link";
 import { useEffect, useMemo, useSyncExternalStore } from "react";
 import { Text, Paper } from "@mantine/core";
 import CoverImage from "../../components/CoverImage";
@@ -39,12 +38,13 @@ function useBrowserUrl() {
 function Article() {
   const router = useRouter();
 
-  // Handler for random article navigation
+  // Start a fresh document so Axate initializes for the destination article.
   const goToRandomArticle = () => {
     const randomValues = new Uint32Array(1);
     window.crypto.getRandomValues(randomValues);
     const randomId = randomValues[0] % 42691;
-    router.push(`/articles/${randomId}`);
+    // eslint-disable-next-line @next/next/no-location-assign-relative-destination -- Axate requires a fresh document.
+    window.location.assign(`/articles/${randomId}`);
   };
 
   const articleUrl = useBrowserUrl();
@@ -184,9 +184,9 @@ function Article() {
       </Head>
       <main id="main-content" tabIndex={-1} className={styles.main}>
         <nav className={styles.actions} aria-label="Article navigation">
-          <Link href="/" className={styles.backButton}>
+          <a href="/" className={styles.backButton}>
             ← All stories
-          </Link>
+          </a>
           <button
             type="button"
             className={styles.backButton}

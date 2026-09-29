@@ -1,5 +1,4 @@
 import Head from "next/head";
-import Link from "next/link";
 import { useState } from "react";
 import styles from "../styles/Article.module.css";
 
@@ -69,9 +68,9 @@ export default function StaticryptPage() {
       <Head>
         <title>Encrypt HTML | Branch Master News</title>
       </Head>
-      <Link href="/" className={styles.backButton}>
+      <a href="/" className={styles.backButton}>
         ← All stories
-      </Link>
+      </a>
       <div className={styles.article}>
         <h1 className={styles.title}>Encrypt HTML</h1>
         <p style={{ marginTop: "0.5rem" }}>

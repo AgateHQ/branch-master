@@ -85,8 +85,8 @@ export const HERO_ARTICLE =
 export const GRID_ARTICLES = ARTICLES.filter((article) => !article.isHero);
 
 export const INTEGRATION_CARD = {
-  href: "/articles/axate-integration",
-  title: "Axate Wallet Integration",
+  href: "https://wallet.axate.io/install.html",
+  title: "Axate Wallet Installation",
   category: "Getting started",
   isFeatured: true,
   blurb: "Learn how to embed the Axate wallet.",

@@ -1,11 +1,10 @@
-import Link from "next/link";
 import CoverImage from "./CoverImage";
 import styles from "../styles/Home.module.css";
 
 /** The compact pinned article at the top of the index. */
 export default function HeroArticle({ article }) {
   return (
-    <Link href={article.href} className={styles.heroArticle}>
+    <a href={article.href} className={styles.heroArticle}>
       <CoverImage
         src={article.image}
         alt=""
@@ -19,6 +18,6 @@ export default function HeroArticle({ article }) {
         <p className={styles.heroBlurb}>{article.blurb}</p>
         <span className={styles.readStory}>Read story</span>
       </div>
-    </Link>
+    </a>
   );
 }

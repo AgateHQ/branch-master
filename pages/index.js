@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import SelectEnvironment from "../components/SelectEnvironment";
@@ -22,12 +21,12 @@ export default function Home() {
       <header className={styles.header}>
         <div className={`${styles.headerRow} ${styles.shell}`}>
           <nav className={styles.navigation} aria-label="Main navigation">
-            <Link href="/" aria-current="page">
+            <a href="/" aria-current="page">
               Home
-            </Link>
+            </a>
             <a href="#latest-heading">Latest stories</a>
-            <Link href="/articles/axate-integration">Axate guide</Link>
-            <Link href="/staticrypt">Encrypt HTML</Link>
+            <a href={INTEGRATION_CARD.href}>Install Axate</a>
+            <a href="/staticrypt">Encrypt HTML</a>
           </nav>
           <div className={styles.environment}>
             <span className={styles.environmentLabel}>Wallet</span>
@@ -67,7 +66,7 @@ export default function Home() {
         </section>
 
         <footer className={styles.footer}>
-          <Link href="/">Branch Master News</Link>
+          <a href="/">Branch Master News</a>
           <p className={styles.version}>
             Current Version: {process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_MESSAGE}
           </p>
