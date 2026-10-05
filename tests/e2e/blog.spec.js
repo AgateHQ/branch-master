@@ -1,12 +1,28 @@
+import { createHash } from "node:crypto";
 import { expect, test } from "@playwright/test";
 
+const walletBody = "window.__axateWalletLoaded = true;";
+const integrity = `sha384-${createHash("sha384").update(walletBody).digest("base64")}`;
+const manifest = {
+  schemaVersion: 1,
+  recommendedVersion: "1.0.19",
+  releases: ["1.0.17", "1.0.19"].map((version) => ({
+    version,
+    url: `https://wallet-staging.axate.io/${version}/bundle.js`,
+    integrity,
+  })),
+};
+
 async function mockAxateWallet(page) {
+  await page.route("**/api/axate-versions", (route) =>
+    route.fulfill({ json: manifest }),
+  );
   await page.route(
-    /^https:\/\/wallet(?:-staging)?\.axate\.io\/(?:1\.0\.17\/)?bundle\.js$/,
+    /^https:\/\/wallet(?:-staging)?\.axate\.io\/(?:1\.0\.\d+\/)?bundle\.js$/,
     async (route) => {
       await route.fulfill({
         contentType: "application/javascript",
-        body: "window.__axateWalletLoaded = true;",
+        body: walletBody,
       });
     },
   );
@@ -33,12 +49,9 @@ test("loads staging by default without hydration errors", async ({ page }) => {
   const walletScript = page.locator("#axate-wallet-staging");
   await expect(walletScript).toHaveAttribute(
     "src",
-    "https://wallet-staging.axate.io/1.0.17/bundle.js",
+    "https://wallet-staging.axate.io/1.0.19/bundle.js",
   );
-  await expect(walletScript).toHaveAttribute(
-    "integrity",
-    "sha384-z2efofXY+Hbf60NzUF6AZDlrBEcRLYQLSjcmXJyP4k7YxS0BHEewI7aUypXJ9nSe",
-  );
+  await expect(walletScript).toHaveAttribute("integrity", integrity);
   await expect(walletScript).toHaveAttribute("crossorigin", "anonymous");
   expect(hydrationErrors).toEqual([]);
 });
@@ -188,5 +201,44 @@ test("story links and random navigation load fresh documents", async ({
   await expect(page.locator("#axate-wallet")).toHaveAttribute(
     "data-selector-button-mode",
     "true",
+  );
+});
+
+test("pins staging versions and returns to latest", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("Axate staging version").selectOption("1.0.17");
+  await expect(page.locator("#axate-wallet-staging")).toHaveAttribute(
+    "src",
+    manifest.releases[0].url,
+  );
+  await expect(page.locator("#axate-wallet-staging")).toHaveAttribute(
+    "integrity",
+    integrity,
+  );
+  await expect
+    .poll(() => page.evaluate(() => window.__axateWalletLoaded))
+    .toBe(true);
+  await page.getByLabel("Axate staging version").selectOption("latest");
+  await expect(page.locator("#axate-wallet-staging")).toHaveAttribute(
+    "src",
+    manifest.releases[1].url,
+  );
+});
+
+test("does not load a staging bundle when the manifest fails", async ({
+  page,
+}) => {
+  await page.route("**/api/axate-versions", (route) =>
+    route.fulfill({ status: 502, json: {} }),
+  );
+  await page.goto("/");
+  await expect(page.getByRole("status")).toContainText(
+    "staging version unavailable",
+  );
+  await expect(page.locator("#axate-wallet-staging")).toHaveCount(0);
+  await page.getByLabel("Axate environment").selectOption("live");
+  await expect(page.locator("#axate-wallet-live")).toHaveAttribute(
+    "src",
+    "https://wallet.axate.io/bundle.js",
   );
 });

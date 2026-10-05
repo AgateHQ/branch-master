@@ -44,6 +44,17 @@ The selected Axate environment is stored under the `selectedEnvironment`
 local-storage key. Existing `selectedEnviroment` values are migrated
 automatically. If no value has been selected, the app uses staging.
 
+Staging defaults to **Latest**, resolving `recommendedVersion` from
+[the staging manifest](https://wallet-staging.axate.io/versions.json) on each
+fresh page load via `/api/axate-versions` (no caching). The bundle URL and SHA-384
+integrity always come from the same release entry. The staging version selector
+can pin any listed release; this preference is saved as `selectedStagingVersion`.
+Choose Latest again to follow new recommended releases. Changing either selector
+reloads the document so only one wallet initializes. Live uses its existing
+unversioned bundle. If the manifest fails validation or a pinned release disappears,
+the staging wallet stays unloaded and displays an error; reload to retry or choose
+Latest. The server needs access to the staging manifest.
+
 > The **Live** option loads the production wallet and registration service.
 > Use staging for routine development and testing.
 
@@ -137,10 +148,10 @@ multi-instance production deployment.
 
 The environment selector controls which remote services the browser uses:
 
-| Environment | Wallet bundle                       | Registration service        |
-| ----------- | ----------------------------------- | --------------------------- |
-| Staging     | `wallet-staging.axate.io/bundle.js` | `register-staging.axate.io` |
-| Live        | `wallet.axate.io/bundle.js`         | `register.axate.io`         |
+| Environment | Wallet bundle                                 | Registration service        |
+| ----------- | --------------------------------------------- | --------------------------- |
+| Staging     | `wallet-staging.axate.io/<version>/bundle.js` | `register-staging.axate.io` |
+| Live        | `wallet.axate.io/bundle.js`                   | `register.axate.io`         |
 
 ### Mobile usability
 
