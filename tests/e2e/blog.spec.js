@@ -56,6 +56,38 @@ test("loads staging by default without hydration errors", async ({ page }) => {
   expect(hydrationErrors).toEqual([]);
 });
 
+test("loads the unversioned staging wallet by default on KWR", async ({
+  page,
+}) => {
+  await page.goto("http://kwr.localhost:3000/");
+
+  const walletScript = page.locator("#axate-wallet-staging");
+  await expect(walletScript).toHaveAttribute(
+    "src",
+    "https://wallet-staging.axate.io/bundle.js",
+  );
+  await expect(walletScript).not.toHaveAttribute("integrity", /.+/);
+  await expect(page.getByLabel("Axate staging version")).toHaveValue(
+    "development",
+  );
+});
+
+test("emits the KWR edition tag in the initial article HTML", async ({
+  request,
+}) => {
+  for (const articleId of [2, 4]) {
+    const response = await request.get(`/articles/${articleId}`);
+    expect(response.status()).toBe(200);
+    expect(await response.text()).toContain(
+      '<meta property="article:tag" content="christmas-2026"',
+    );
+  }
+
+  const ordinaryArticle = await request.get("/articles/6");
+  expect(ordinaryArticle.status()).toBe(200);
+  expect(await ordinaryArticle.text()).not.toContain('property="article:tag"');
+});
+
 test("persists a live environment selection", async ({ page }) => {
   await page.goto("/");
   await page.getByLabel("Axate environment").selectOption("live");

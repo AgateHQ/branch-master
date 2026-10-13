@@ -61,6 +61,18 @@ export function useAxateEnvironment() {
 
 const WalletContext = createContext(null);
 const VERSION_KEY = "selectedStagingVersion";
+const DEVELOPMENT_VERSION = "development";
+
+function readStoredVersion() {
+  const storedVersion = window.localStorage.getItem(VERSION_KEY);
+  if (storedVersion) {
+    return storedVersion;
+  }
+
+  return window.location.hostname.split(".")[0] === "kwr"
+    ? DEVELOPMENT_VERSION
+    : "latest";
+}
 
 export function AxateWalletProvider({ children }) {
   const { environment } = useAxateEnvironment();
@@ -68,7 +80,7 @@ export function AxateWalletProvider({ children }) {
   const [error, setError] = useState(false);
   const version = useSyncExternalStore(
     subscribeToStorage,
-    () => window.localStorage.getItem(VERSION_KEY) || "latest",
+    readStoredVersion,
     () => "latest",
   );
   const hydrated = useSyncExternalStore(
@@ -99,16 +111,21 @@ export function AxateWalletProvider({ children }) {
       release.version ===
       (version === "latest" ? manifest.recommendedVersion : version),
   );
-  const unavailable = error || (manifest && !release);
+  const usesDevelopmentBundle = version === DEVELOPMENT_VERSION;
+  const unavailable =
+    !usesDevelopmentBundle && (error || (manifest && !release));
   const script =
     hydrated &&
     (environment === "live"
       ? { url: "https://wallet.axate.io/bundle.js" }
-      : release);
+      : usesDevelopmentBundle
+        ? { url: "https://wallet-staging.axate.io/bundle.js" }
+        : release);
 
   function selectVersion(nextVersion) {
     if (
       nextVersion !== "latest" &&
+      nextVersion !== DEVELOPMENT_VERSION &&
       !manifest?.releases.some((release) => release.version === nextVersion)
     )
       return;

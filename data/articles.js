@@ -49,6 +49,11 @@ export const HERO_ARTICLE_ID = 1;
 // Ids that render as double-width cards in the index grid.
 export const FEATURED_ARTICLE_IDS = new Set([2]);
 
+// Two standard-placement articles share an edition tag so the KWR fixture can
+// prove that one purchase unlocks more than one article in the same edition.
+export const CHRISTMAS_EDITION_TAG = "christmas-2026";
+export const CHRISTMAS_EDITION_ARTICLE_IDS = new Set([2, 4]);
+
 export const AXATE_LOGO_SRC = "/axate-logo.webp";
 
 /**
@@ -67,15 +72,19 @@ export function articleImageSrc(id) {
 
 export const ARTICLES = Array.from({ length: ARTICLE_COUNT }, (_, index) => {
   const id = index + 1;
+  const editionTag = CHRISTMAS_EDITION_ARTICLE_IDS.has(id)
+    ? CHRISTMAS_EDITION_TAG
+    : null;
   return {
     id,
     href: `/articles/${id}`,
     title: `Article #${id}`,
-    category: "Stories",
+    category: editionTag ? "Christmas 2026 edition" : "Stories",
     blurb: KEATS_LINES[index % KEATS_LINES.length],
     image: articleImageSrc(id),
     isHero: id === HERO_ARTICLE_ID,
     isFeatured: FEATURED_ARTICLE_IDS.has(id),
+    editionTag,
   };
 });
 

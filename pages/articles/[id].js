@@ -1,10 +1,9 @@
 import Head from "next/head";
-import { useRouter } from "next/router";
 import styles from "../../styles/Article.module.css";
 import { useEffect, useMemo, useSyncExternalStore } from "react";
 import { Text, Paper } from "@mantine/core";
 import CoverImage from "../../components/CoverImage";
-import { AXATE_LOGO_SRC, articleImageSrc } from "../../data/articles";
+import { ARTICLES, AXATE_LOGO_SRC, articleImageSrc } from "../../data/articles";
 
 const DEFAULT_SITE_ORIGIN = "https://branchmaster.news";
 const ARTICLE_DESCRIPTION =
@@ -35,9 +34,7 @@ function useBrowserUrl() {
   );
 }
 
-function Article() {
-  const router = useRouter();
-
+function Article({ articleId }) {
   // Start a fresh document so Axate initializes for the destination article.
   const goToRandomArticle = () => {
     const randomValues = new Uint32Array(1);
@@ -49,9 +46,11 @@ function Article() {
 
   const articleUrl = useBrowserUrl();
 
-  const articleId = parseInt(router.query.id || "1", 10);
   const safeArticleId =
     Number.isFinite(articleId) && articleId > 0 ? articleId : 1;
+  const editionTag =
+    ARTICLES.find((article) => article.id === safeArticleId)?.editionTag ??
+    null;
   const articleImageUrl = articleImageSrc(safeArticleId);
   const premiumHeight =
     PREMIUM_HEIGHTS[(safeArticleId - 1) % PREMIUM_HEIGHTS.length];
@@ -175,6 +174,9 @@ function Article() {
       <Head>
         <title>{articleHeadline}</title>
         <meta name="description" content={ARTICLE_DESCRIPTION} />
+        {editionTag && (
+          <meta property="article:tag" content={editionTag} key="article-tag" />
+        )}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -312,6 +314,14 @@ function Article() {
       </main>
     </>
   );
+}
+
+export function getServerSideProps({ params }) {
+  const requestedId = Number.parseInt(params?.id || "1", 10);
+  const articleId =
+    Number.isFinite(requestedId) && requestedId > 0 ? requestedId : 1;
+
+  return { props: { articleId } };
 }
 
 export default Article;

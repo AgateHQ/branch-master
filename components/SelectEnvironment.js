@@ -37,7 +37,9 @@ export default function SelectEnvironment() {
             <option value="latest">
               Latest{manifest ? ` (${manifest.recommendedVersion})` : ""}
             </option>
+            <option value="development">Development (unversioned)</option>
             {version !== "latest" &&
+              version !== "development" &&
               !manifest?.releases.some(
                 (release) => release.version === version,
               ) && <option value={version}>{version} (unavailable)</option>}

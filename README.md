@@ -55,6 +55,12 @@ unversioned bundle. If the manifest fails validation or a pinned release disappe
 the staging wallet stays unloaded and displays an error; reload to retry or choose
 Latest. The server needs access to the staging manifest.
 
+On the `kwr` subdomain, a fresh browser defaults to **Development
+(unversioned)** instead. This intentionally loads the mutable staging root
+bundle so wallet changes can be exercised before they receive an immutable
+release number. A saved version choice still wins, and the selector can return
+to Development at any time.
+
 > The **Live** option loads the production wallet and registration service.
 > Use staging for routine development and testing.
 
@@ -71,6 +77,14 @@ Latest. The server needs access to the staging manifest.
 The Axate integration depends on the markup in `pages/_document.js` and the
 `.premium` and `.axate-notice` selectors used by article pages. See
 `pages/articles/[id].js` for the primary test scenario.
+
+### KWR Christmas edition test
+
+On `kwr.branch-master.axate.io`, articles 2 and 4 both emit
+`<meta property="article:tag" content="christmas-2026">` in the initial HTML.
+They use standard notice placement so you can accept the special edition
+purchase on article 2, then open article 4 to verify that the same edition is
+already unlocked. Article 6 has no edition tag and is the free KWR control.
 
 Page links use native anchors and the random-article button uses
 `window.location.assign` to load a fresh document. This lets the Axate wallet
