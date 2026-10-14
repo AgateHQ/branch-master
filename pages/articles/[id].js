@@ -3,6 +3,8 @@ import styles from "../../styles/Article.module.css";
 import { useEffect, useMemo, useSyncExternalStore } from "react";
 import { Text, Paper } from "@mantine/core";
 import CoverImage from "../../components/CoverImage";
+import SocialShare from "../../components/SocialShare";
+import Comments from "../../components/Comments";
 import { ARTICLES, AXATE_LOGO_SRC, articleImageSrc } from "../../data/articles";
 
 const DEFAULT_SITE_ORIGIN = "https://branchmaster.news";
@@ -311,6 +313,10 @@ function Article({ articleId }) {
           </Paper>
         </div>
         <div className="axate-notice"></div>
+
+        {/* Post-article engagement */}
+        <SocialShare articleUrl={articleOrigin} />
+        <Comments />
       </main>
     </>
   );
