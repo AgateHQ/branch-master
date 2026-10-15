@@ -93,7 +93,6 @@ export const ARTICLES = Array.from({ length: ARTICLE_COUNT }, (_, index) => {
     image: articleImageSrc(id),
     isHero: id === HERO_ARTICLE_ID,
     isFeatured: FEATURED_ARTICLE_IDS.has(id),
-    isFreeControl: FREE_CONTROL_ARTICLE_IDS.has(id),
     editionTag,
   };
 });

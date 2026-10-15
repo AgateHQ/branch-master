@@ -161,6 +161,20 @@ test("uses the publisher subdomain in registration links", async ({ page }) => {
   ).toHaveAttribute("href", /[?&]pub=rad(?:&|$)/);
 });
 
+test("omits the registration link on the free control article", async ({
+  page,
+}) => {
+  await page.goto("/articles/6");
+  await expect(
+    page.getByRole("link", { name: "Go to new registration" }),
+  ).toHaveCount(0);
+
+  await page.goto("/articles/2");
+  await expect(
+    page.getByRole("link", { name: "Go to new registration" }),
+  ).toHaveCount(1);
+});
+
 test("alternates Axate button mode by article id", async ({ page }) => {
   await page.goto("/articles/1");
   await expect(page.locator("#axate-wallet")).toHaveAttribute(
@@ -225,6 +239,36 @@ test("validates and encrypts uploaded HTML", async ({ request }) => {
     'filename="encrypted.html"',
   );
   expect(await encryptedResponse.text()).toContain("Protected Page");
+});
+
+test("masks and toggles the Staticrypt password", async ({ page }) => {
+  await page.goto("/staticrypt");
+  const password = page.getByLabel("Password", { exact: true });
+
+  await expect(password).toHaveAttribute("type", "password");
+  await page.getByRole("button", { name: "Show password" }).click();
+  await expect(password).toHaveAttribute("type", "text");
+  await page.getByRole("button", { name: "Hide password" }).click();
+  await expect(password).toHaveAttribute("type", "password");
+});
+
+test("shows an inline error when encryption fails", async ({ page }) => {
+  await page.route("**/api/encrypt", (route) =>
+    route.fulfill({ status: 500, json: {} }),
+  );
+
+  await page.goto("/staticrypt");
+  await page.getByLabel("HTML file").setInputFiles({
+    name: "page.html",
+    mimeType: "text/html",
+    buffer: Buffer.from("<!doctype html><html><body>Hi</body></html>"),
+  });
+  await page.getByLabel("Password", { exact: true }).fill("secret");
+  await page.getByRole("button", { name: "Encrypt", exact: true }).click();
+
+  await expect(
+    page.getByRole("alert").filter({ hasText: "Encryption failed" }),
+  ).toBeVisible();
 });
 
 for (const width of [320, 390, 768, 1280]) {

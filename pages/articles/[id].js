@@ -227,7 +227,7 @@ function Article({ articleId }) {
             preload
             style={{ background: heroGradient }}
           />
-          {registrationLink && (
+          {!isFreeControl && registrationLink && (
             <div className={styles.registration}>
               <a href={registrationLink} className={styles.registrationLink}>
                 Go to new registration
