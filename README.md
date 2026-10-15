@@ -66,13 +66,13 @@ to Development at any time.
 
 ## Useful routes
 
-| Route                         | Purpose                                             |
-| ----------------------------- | --------------------------------------------------- |
-| `/`                           | Synthetic blog index and Axate environment selector |
-| `/articles/:id`               | Generated premium article; odd IDs use button mode  |
-| `/articles/axate-integration` | Redirect to Axate installation instructions         |
-| `/staticrypt`                 | Upload and password-protect an HTML file            |
-| `/api/encrypt`                | POST endpoint used by the Staticrypt page           |
+| Route                         | Purpose                                               |
+| ----------------------------- | ----------------------------------------------------- |
+| `/`                           | Synthetic blog index and Axate environment selector   |
+| `/articles/:id`               | Generated article; odd IDs use button mode, 6 is free |
+| `/articles/axate-integration` | Redirect to Axate installation instructions           |
+| `/staticrypt`                 | Upload and password-protect an HTML file              |
+| `/api/encrypt`                | POST endpoint used by the Staticrypt page             |
 
 The Axate integration depends on the markup in `pages/_document.js` and the
 `.premium` and `.axate-notice` selectors used by article pages. See
@@ -84,7 +84,9 @@ On `kwr.branch-master.axate.io`, articles 2 and 4 both emit
 `<meta property="article:tag" content="christmas-2026">` in the initial HTML.
 They use standard notice placement so you can accept the special edition
 purchase on article 2, then open article 4 to verify that the same edition is
-already unlocked. Article 6 has no edition tag and is the free KWR control.
+already unlocked. Article 6 has no edition tag and is the free KWR control: it
+renders without the `.premium` paywall and its `NewsArticle` JSON-LD reports
+`isAccessibleForFree: true`.
 
 Page links use native anchors and the random-article button uses
 `window.location.assign` to load a fresh document. This lets the Axate wallet
@@ -99,8 +101,9 @@ npm run dev       # start the development server
 npm run build     # create a production build
 npm start         # serve the production build
 npm run format    # format the repository with Prettier
-npm run lint      # run Next.js and React Hooks lint rules
+npm run lint      # run Next.js, React Hooks, and jsx-a11y lint rules
 npm run test:e2e  # run the Playwright integration suite
+npm run test:ci   # lint, then the Playwright suite (used by CI)
 ```
 
 Before submitting a change, run the complete validation suite:
@@ -112,6 +115,11 @@ npm run test:e2e
 npm run build
 npm audit
 ```
+
+CI runs `format:check`, `lint`, `build`, and `test:e2e` on every pull request and
+on pushes to `main`; see `.github/workflows/ci.yml`. The end-to-end suite is
+hermetic — it mocks the Axate wallet and the staging manifest — so CI needs no
+access to the remote services.
 
 ## Project layout
 
@@ -126,7 +134,7 @@ data/articles.js       The article catalogue — edit this to change content
 pages/                 Next.js Pages Router pages and API routes
   articles/[id].js     Main generated paywall scenario
   api/encrypt.js       Server-side Staticrypt endpoint
-lib/                   Staticrypt HTML template
+lib/                   Staticrypt template and encrypt wrapper module
 public/                WebP sample article covers and static assets
 styles/                Global, index, card, and article styles
 tests/e2e/              Playwright browser and API scenarios

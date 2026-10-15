@@ -14,10 +14,8 @@ import styles from "../styles/CoverImage.module.css";
  *
  * LCP hints: `preload` inserts a <link rel="preload"> in the head and replaces
  * the `priority` prop that Next.js 16 deprecated. Reach for it only when the
- * image src is stable across the server render and hydration. If the src
- * changes after hydration — which it does on the article pages, see the note in
- * AGENTS.md — use `eager` + `fetchPriority` instead, so a wasted preloaded
- * request is not guaranteed.
+ * image src is stable across the server render and hydration — for example the
+ * article hero, whose id comes from `getServerSideProps`.
  */
 export default function CoverImage({
   src,
@@ -25,8 +23,6 @@ export default function CoverImage({
   sizes,
   className = "",
   preload = false,
-  eager = false,
-  fetchPriority,
   style,
 }) {
   const frameClassName = [styles.frame, className].filter(Boolean).join(" ");
@@ -39,8 +35,6 @@ export default function CoverImage({
         fill
         sizes={sizes}
         preload={preload}
-        loading={eager ? "eager" : undefined}
-        fetchPriority={fetchPriority}
         className={styles.image}
       />
     </div>

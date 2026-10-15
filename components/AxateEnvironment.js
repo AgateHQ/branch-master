@@ -23,14 +23,20 @@ function readStoredEnvironment() {
 }
 
 function subscribeToStorage(callback) {
+  window.addEventListener("storage", callback);
+  return () => window.removeEventListener("storage", callback);
+}
+
+// One-time cleanup of the legacy `selectedEnviroment` spelling. It runs from an
+// effect rather than the subscribe callback so React (re)subscribing can never
+// turn it into a repeated write. `readStoredEnvironment` already falls back to
+// the legacy key, so this is a tidy-up, not a correctness requirement.
+function migrateLegacyEnvironmentKey() {
   const legacyEnvironment = window.localStorage.getItem(LEGACY_STORAGE_KEY);
   if (VALID_ENVIRONMENTS.has(legacyEnvironment)) {
     window.localStorage.setItem(STORAGE_KEY, legacyEnvironment);
     window.localStorage.removeItem(LEGACY_STORAGE_KEY);
   }
-
-  window.addEventListener("storage", callback);
-  return () => window.removeEventListener("storage", callback);
 }
 
 export function useAxateEnvironment() {
@@ -90,6 +96,18 @@ export function AxateWalletProvider({ children }) {
   );
 
   useEffect(() => {
+    migrateLegacyEnvironmentKey();
+  }, []);
+
+  useEffect(() => {
+    // Wait for hydration so the first run sees the stored environment rather
+    // than the SSR default, and skip entirely on live: the manifest only
+    // describes the staging bundle (release URL + integrity), while live loads
+    // an unversioned URL directly.
+    if (!hydrated || environment === "live") {
+      return undefined;
+    }
+
     const controller = new AbortController();
     fetch("/api/axate-versions", {
       cache: "no-store",
@@ -104,7 +122,7 @@ export function AxateWalletProvider({ children }) {
         if (!controller.signal.aborted) setError(true);
       });
     return () => controller.abort();
-  }, []);
+  }, [environment, hydrated]);
 
   const release = manifest?.releases.find(
     (release) =>

@@ -1,3 +1,7 @@
+// Proxies the staging wallet manifest with validation. Intentionally uncached
+// (`no-store` on both the response and the upstream fetch): the fixture exists
+// to exercise freshly published staging releases, so a stale manifest would
+// hide the very behaviour under test. See the README note on this endpoint.
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (req.method !== "GET") {

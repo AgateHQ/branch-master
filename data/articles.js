@@ -54,6 +54,15 @@ export const FEATURED_ARTICLE_IDS = new Set([2]);
 export const CHRISTMAS_EDITION_TAG = "christmas-2026";
 export const CHRISTMAS_EDITION_ARTICLE_IDS = new Set([2, 4]);
 
+// Article ids that stay free to read — the KWR control (see the README). They
+// render without a paywall so the structured data can honestly mark them
+// accessible for free, keeping the JSON-LD aligned with the `.premium` selector.
+export const FREE_CONTROL_ARTICLE_IDS = new Set([6]);
+
+export function isFreeControlArticle(id) {
+  return FREE_CONTROL_ARTICLE_IDS.has(id);
+}
+
 export const AXATE_LOGO_SRC = "/axate-logo.webp";
 
 /**
@@ -84,6 +93,7 @@ export const ARTICLES = Array.from({ length: ARTICLE_COUNT }, (_, index) => {
     image: articleImageSrc(id),
     isHero: id === HERO_ARTICLE_ID,
     isFeatured: FEATURED_ARTICLE_IDS.has(id),
+    isFreeControl: FREE_CONTROL_ARTICLE_IDS.has(id),
     editionTag,
   };
 });

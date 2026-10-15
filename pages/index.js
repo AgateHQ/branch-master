@@ -9,6 +9,14 @@ import {
   INTEGRATION_CARD,
 } from "../data/articles";
 
+// Vercel exposes these at build time. Fall back to the commit SHA, and render
+// nothing at all when neither is available (e.g. a plain local build).
+const VERSION_LABEL =
+  process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_MESSAGE ||
+  (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA
+    ? process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA.slice(0, 7)
+    : "");
+
 export default function Home() {
   return (
     <div className={styles.container}>
@@ -67,9 +75,9 @@ export default function Home() {
 
         <footer className={styles.footer}>
           <a href="/">Branch Master News</a>
-          <p className={styles.version}>
-            Current Version: {process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_MESSAGE}
-          </p>
+          {VERSION_LABEL && (
+            <p className={styles.version}>Current Version: {VERSION_LABEL}</p>
+          )}
         </footer>
       </main>
     </div>

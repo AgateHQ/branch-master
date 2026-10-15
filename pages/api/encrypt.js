@@ -1,11 +1,4 @@
-import fs from "fs";
-import path from "path";
-import cryptoEngine from "staticrypt/lib/cryptoEngine.js";
-import codecModule from "staticrypt/lib/codec.js";
-import { renderTemplate } from "staticrypt/lib/formater.js";
-import { buildStaticryptJS } from "staticrypt/cli/helpers.js";
-
-const { encode } = codecModule.init(cryptoEngine);
+import { encryptHtmlToStaticryptPage } from "../../lib/staticrypt";
 
 const MAX_REQUESTS = 10;
 const RATE_LIMIT_WINDOW_MS = 60_000;
@@ -20,8 +13,21 @@ function getClientAddress(req) {
   return req.socket.remoteAddress || "unknown";
 }
 
+// Drop any address whose newest request is already outside the window, so the
+// map cannot grow without bound as clients come and go.
+function pruneExpiredEntries(now) {
+  for (const [address, timestamps] of requestLog) {
+    const newest = timestamps[timestamps.length - 1];
+    if (newest === undefined || now - newest >= RATE_LIMIT_WINDOW_MS) {
+      requestLog.delete(address);
+    }
+  }
+}
+
 function isRateLimited(clientAddress) {
   const now = Date.now();
+  pruneExpiredEntries(now);
+
   const recentRequests = (requestLog.get(clientAddress) || []).filter(
     (timestamp) => now - timestamp < RATE_LIMIT_WINDOW_MS,
   );
@@ -80,41 +86,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const salt = cryptoEngine.generateRandomSalt();
-    const encryptedMsg = await encode(html, password, salt);
-
-    const templatePath = path.join(
-      process.cwd(),
-      "lib",
-      "password_template.html",
-    );
-    const template = fs.readFileSync(templatePath, "utf8");
-
-    const staticryptConfig = {
-      staticryptEncryptedMsgUniqueVariableName: encryptedMsg,
-      isRememberEnabled: true,
-      rememberDurationInDays: 30,
-      staticryptSaltUniqueVariableName: salt,
-    };
-
-    const templateData = {
-      is_remember_enabled: JSON.stringify(true),
-      js_staticrypt: buildStaticryptJS(),
-      template_button: "DECRYPT",
-      template_color_primary: "#4CAF50",
-      template_color_secondary: "#76B852",
-      template_error: "Bad password!",
-      template_instructions:
-        "Enter the password you chose to decrypt this page. You can also select 'Remember me' to skip the password for 30 days.",
-      template_placeholder: "Password",
-      template_remember: "Remember me",
-      template_title: "Protected Page",
-      template_toggle_show: "Show password",
-      template_toggle_hide: "Hide password",
-      staticrypt_config: staticryptConfig,
-    };
-
-    const output = renderTemplate(template, templateData);
+    const output = await encryptHtmlToStaticryptPage(html, password);
 
     res.setHeader("Content-Type", "text/html");
     res.setHeader(

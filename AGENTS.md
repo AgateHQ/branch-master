@@ -39,6 +39,9 @@ unless the task explicitly requires it.
   are updated together.
 - Dynamic article pages intentionally alternate behaviour: odd article IDs use
   button mode and even IDs use the standard placement.
+- Article `6` is the free KWR control. `data/articles.js` lists it in
+  `FREE_CONTROL_ARTICLE_IDS`, so `/articles/6` renders without `.premium` or
+  `.axate-notice`, and its JSON-LD marks the article accessible for free.
 - Publisher registration links derive the publisher code from the current
   hostname. Check both plain `localhost` and a publisher subdomain when changing
   this logic.
@@ -63,14 +66,12 @@ integration changes against staging when practical.
   (the "Go to a Random Article" button targets 0–42690).
 - Next.js 16 deprecated the `priority` prop on `next/image` in favour of
   `preload`. Use `preload` only when the image `src` is stable across SSR and
-  hydration. The article hero uses `eager` + `fetchPriority` instead, because
-  `pages/articles/[id].js` is statically prerendered with an empty
-  `router.query.id`: the server always emits the article-1 cover and the
-  client swaps it after hydration. That costs one extra image request on
-  article pages. It is a known trade-off of keeping the route static, and it is
-  pre-existing — do not "fix" it by switching the route to
-  `getServerSideProps` without flagging the change, since that would also
-  change the prerender characteristics the fixture relies on.
+  hydration. The article hero qualifies: `pages/articles/[id].js` is
+  server-rendered with `getServerSideProps`, so the server emits the cover for
+  the requested id and the client does not swap it. The hero therefore uses
+  `preload`, and no extra image request is needed. (This replaced an earlier
+  `eager` + `fetchPriority` workaround that existed only while the route was
+  prerendered with an empty `router.query.id`.)
 - `styles/globals.css` deliberately has no blanket `.app-container img` height
   rule. A previous `height: 200px` override silently beat every component's
   intended image height. Size images in the component that owns them.
@@ -97,7 +98,8 @@ Paint (LCP)`. This is a Next.js false positive, not a real LCP problem. In
 - `components/CoverImage.js`: `next/image` wrapper used by every local image
 - `components/ArticleCard.js` and `components/HeroArticle.js`: index blocks
 - `pages/articles/[id].js`: primary premium-article test fixture
-- `pages/articles/axate-integration.js`: example integration instructions
+- `next.config.js`: redirects `/articles/axate-integration` to the Axate install
+  page (the in-repo integration page was removed as unreachable)
 - `pages/_app.js`: wallet script selection and Mantine provider
 - `pages/_document.js`: Axate mount element and default selectors
 - `pages/staticrypt.js` and `pages/api/encrypt.js`: password-protected HTML tool
@@ -145,7 +147,7 @@ clearly in the handoff or pull request.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
-# This is NOT the Next.js you know
+## This is NOT the Next.js you know
 
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
 

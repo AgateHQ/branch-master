@@ -1,10 +1,10 @@
 import styles from "../styles/SocialShare.module.css";
 
-function SocialShare({ articleUrl }) {
+function SocialShare({ articleUrl, title }) {
   if (!articleUrl) return null;
 
   const shareData = {
-    title: `Paywall Implementation Playbook`,
+    title: title || "Paywall Implementation Playbook",
     url: articleUrl,
     text: "Practical guidance for configuring, testing, and maintaining a sustainable digital paywall experience.",
   };

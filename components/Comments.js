@@ -1,4 +1,5 @@
 import { Group, Text, Avatar } from "@mantine/core";
+import { useState } from "react";
 import styles from "../styles/Comments.module.css";
 
 const MOCK_COMMENTS = [
@@ -53,10 +54,24 @@ const MOCK_COMMENTS = [
 ];
 
 function Comments() {
+  const [likedCommentIds, setLikedCommentIds] = useState(() => new Set());
+
+  const toggleLike = (id) => {
+    setLikedCommentIds((current) => {
+      const next = new Set(current);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  };
+
   return (
     <section className={styles.section}>
-      <Group spacing="12px" mb="var(--mantine-spacing-xl)">
-        <Text fw={700} fontSize="var(--mantine-font-size-lg)">
+      <Group gap="12px" mb="var(--mantine-spacing-xl)">
+        <Text component="h2" fw={700} size="lg" m={0}>
           Comments ({MOCK_COMMENTS.length})
         </Text>
       </Group>
@@ -96,9 +111,14 @@ function Comments() {
         {MOCK_COMMENTS.map((comment) => (
           <article key={comment.id} className={styles.comment}>
             <header className={styles.commentHeader}>
-              <Group spacing="8px" style={{ marginBottom: "0.5rem" }}>
+              <Group gap="8px" style={{ marginBottom: "0.5rem" }}>
                 {comment.avatarUrl && (
-                  <Avatar src={comment.avatarUrl} size="sm" radius="md" />
+                  <Avatar
+                    src={comment.avatarUrl}
+                    alt=""
+                    size="sm"
+                    radius="md"
+                  />
                 )}
                 <div>
                   <Text fw={600}>{comment.authorName}</Text>
@@ -116,18 +136,27 @@ function Comments() {
               </div>
 
               <footer className={styles.commentFooter}>
-                <Group spacing="8px">
-                  {comment.replies > 0 && (
-                    <>
-                      <button type="button" className={styles.actionButton}>
-                        Reply ({comment.replies})
-                      </button>
-                      <button type="button" className={styles.actionButton}>
-                        Like
-                      </button>
-                    </>
-                  )}
-                  <button type="button" className={styles.actionButton}>
+                <Group gap="8px">
+                  <button
+                    type="button"
+                    className={styles.actionButton}
+                    aria-label={`Reply to ${comment.authorName}`}
+                  >
+                    Reply{comment.replies > 0 ? ` (${comment.replies})` : ""}
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.actionButton}
+                    aria-pressed={likedCommentIds.has(comment.id)}
+                    onClick={() => toggleLike(comment.id)}
+                  >
+                    Like
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.actionButton}
+                    aria-label={`Report comment by ${comment.authorName}`}
+                  >
                     Report
                   </button>
                 </Group>

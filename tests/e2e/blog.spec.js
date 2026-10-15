@@ -54,6 +54,15 @@ test("loads staging by default without hydration errors", async ({ page }) => {
   await expect(walletScript).toHaveAttribute("integrity", integrity);
   await expect(walletScript).toHaveAttribute("crossorigin", "anonymous");
   expect(hydrationErrors).toEqual([]);
+
+  // The article route is server-rendered, so confirm its hydrated output does
+  // not diverge from the server HTML (the stored environment drives the
+  // registration link, which is attached after hydration).
+  await page.goto("/articles/2");
+  await expect(
+    page.getByRole("heading", { name: "Paywall Implementation Playbook #2" }),
+  ).toBeVisible();
+  expect(hydrationErrors).toEqual([]);
 });
 
 test("loads the unversioned staging wallet by default on KWR", async ({
@@ -88,6 +97,21 @@ test("emits the KWR edition tag in the initial article HTML", async ({
   expect(await ordinaryArticle.text()).not.toContain('property="article:tag"');
 });
 
+test("marks the free control article as accessible for free", async ({
+  request,
+}) => {
+  const freeControl = await (await request.get("/articles/6")).text();
+  expect(freeControl).toContain('"isAccessibleForFree":true');
+  expect(freeControl).not.toContain("data-premium-height");
+  expect(freeControl).not.toContain('class="axate-notice"');
+
+  const premium = await (await request.get("/articles/2")).text();
+  expect(premium).toContain('"isAccessibleForFree":false');
+  expect(premium).toContain('"cssSelector":".premium"');
+  expect(premium).toContain("data-premium-height");
+  expect(premium).toContain('class="axate-notice"');
+});
+
 test("persists a live environment selection", async ({ page }) => {
   await page.goto("/");
   await page.getByLabel("Axate environment").selectOption("live");
@@ -98,6 +122,35 @@ test("persists a live environment selection", async ({ page }) => {
       page.evaluate(() => localStorage.getItem("selectedEnvironment")),
     )
     .toBe("live");
+});
+
+test("migrates the legacy selectedEnviroment key", async ({ page }) => {
+  await page.addInitScript(() => {
+    window.localStorage.setItem("selectedEnviroment", "live");
+  });
+  await page.goto("/");
+
+  await expect(page.getByLabel("Axate environment")).toHaveValue("live");
+  await expect
+    .poll(() =>
+      page.evaluate(() => localStorage.getItem("selectedEnvironment")),
+    )
+    .toBe("live");
+  await expect
+    .poll(() => page.evaluate(() => localStorage.getItem("selectedEnviroment")))
+    .toBeNull();
+});
+
+test("uses the live registration origin when live is selected", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByLabel("Axate environment").selectOption("live");
+  await page.goto("/articles/2");
+
+  await expect(
+    page.getByRole("link", { name: "Go to new registration" }),
+  ).toHaveAttribute("href", /^https:\/\/register\.axate\.io\//);
 });
 
 test("uses the publisher subdomain in registration links", async ({ page }) => {
@@ -124,6 +177,37 @@ test("alternates Axate button mode by article id", async ({ page }) => {
   );
 });
 
+test("shows comment actions for comments without replies", async ({ page }) => {
+  await page.goto("/articles/2");
+
+  await expect(
+    page.getByRole("heading", { name: "Comments (4)", level: 2 }),
+  ).toBeVisible();
+
+  const commentWithoutReplies = page
+    .locator("article")
+    .filter({ hasText: "Michael Park" });
+  await expect(
+    commentWithoutReplies.getByRole("button", {
+      name: "Reply to Michael Park",
+    }),
+  ).toBeVisible();
+
+  const likeButton = commentWithoutReplies.getByRole("button", {
+    name: "Like",
+  });
+  await expect(likeButton).toBeVisible();
+  await expect(likeButton).toHaveAttribute("aria-pressed", "false");
+  await likeButton.click();
+  await expect(likeButton).toHaveAttribute("aria-pressed", "true");
+
+  await expect(
+    commentWithoutReplies.getByRole("button", {
+      name: "Report comment by Michael Park",
+    }),
+  ).toBeVisible();
+});
+
 test("validates and encrypts uploaded HTML", async ({ request }) => {
   const invalidResponse = await request.post("/api/encrypt", {
     data: { html: "", password: "" },
@@ -146,7 +230,13 @@ test("validates and encrypts uploaded HTML", async ({ request }) => {
 for (const width of [320, 390, 768, 1280]) {
   test(`pages fit a ${width}px viewport`, async ({ page }) => {
     await page.setViewportSize({ width, height: 844 });
-    for (const route of ["/", "/articles/1", "/articles/2", "/staticrypt"]) {
+    for (const route of [
+      "/",
+      "/articles/1",
+      "/articles/2",
+      "/articles/6",
+      "/staticrypt",
+    ]) {
       await page.goto(route);
       await expect(page.locator("main")).toBeVisible();
       expect(
@@ -255,6 +345,25 @@ test("pins staging versions and returns to latest", async ({ page }) => {
     "src",
     manifest.releases[1].url,
   );
+});
+
+test("persists a pinned staging version on KWR", async ({ page }) => {
+  await page.goto("http://kwr.localhost:3000/");
+  await expect(page.getByLabel("Axate staging version")).toHaveValue(
+    "development",
+  );
+
+  await page.getByLabel("Axate staging version").selectOption("1.0.17");
+  await expect(page.locator("#axate-wallet-staging")).toHaveAttribute(
+    "src",
+    manifest.releases[0].url,
+  );
+  await expect
+    .poll(() =>
+      page.evaluate(() => localStorage.getItem("selectedStagingVersion")),
+    )
+    .toBe("1.0.17");
+  await expect(page.getByLabel("Axate staging version")).toHaveValue("1.0.17");
 });
 
 test("does not load a staging bundle when the manifest fails", async ({

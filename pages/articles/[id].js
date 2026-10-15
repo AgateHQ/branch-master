@@ -5,7 +5,13 @@ import { Text, Paper } from "@mantine/core";
 import CoverImage from "../../components/CoverImage";
 import SocialShare from "../../components/SocialShare";
 import Comments from "../../components/Comments";
-import { ARTICLES, AXATE_LOGO_SRC, articleImageSrc } from "../../data/articles";
+import {
+  ARTICLES,
+  AXATE_LOGO_SRC,
+  articleImageSrc,
+  isFreeControlArticle,
+} from "../../data/articles";
+import { useAxateEnvironment } from "../../components/AxateEnvironment";
 
 const DEFAULT_SITE_ORIGIN = "https://branchmaster.news";
 const ARTICLE_DESCRIPTION =
@@ -47,9 +53,11 @@ function Article({ articleId }) {
   };
 
   const articleUrl = useBrowserUrl();
+  const { environment } = useAxateEnvironment();
 
   const safeArticleId =
     Number.isFinite(articleId) && articleId > 0 ? articleId : 1;
+  const isFreeControl = isFreeControlArticle(safeArticleId);
   const editionTag =
     ARTICLES.find((article) => article.id === safeArticleId)?.editionTag ??
     null;
@@ -87,17 +95,13 @@ function Article({ articleId }) {
 
     const currentUrl = new URL(articleUrl);
     const publisher = currentUrl.hostname.split(".")[0];
-    const environment =
-      window.localStorage.getItem("selectedEnvironment") ||
-      window.localStorage.getItem("selectedEnviroment") ||
-      "staging";
     const registrationOrigin =
       environment === "live"
         ? "https://register.axate.io"
         : "https://register-staging.axate.io";
 
     return `${registrationOrigin}/?pub=${publisher}&redirectTo=${encodeURIComponent(articleUrl)}`;
-  }, [articleUrl]);
+  }, [articleUrl, environment]);
   const articleSchema = useMemo(
     () => ({
       "@context": "https://schema.org",
@@ -124,12 +128,16 @@ function Article({ articleId }) {
         },
       },
       description: ARTICLE_DESCRIPTION,
-      isAccessibleForFree: false,
-      hasPart: {
-        "@type": "WebPageElement",
-        isAccessibleForFree: false,
-        cssSelector: ".premium",
-      },
+      isAccessibleForFree: isFreeControl,
+      ...(isFreeControl
+        ? {}
+        : {
+            hasPart: {
+              "@type": "WebPageElement",
+              isAccessibleForFree: false,
+              cssSelector: ".premium",
+            },
+          }),
       inLanguage: "en",
       articleSection: "Features",
     }),
@@ -138,6 +146,7 @@ function Article({ articleId }) {
       articleImageUrl,
       articleOrigin,
       canonicalUrl,
+      isFreeControl,
       publishedDate,
     ],
   );
@@ -201,8 +210,12 @@ function Article({ articleId }) {
         </nav>
 
         <div
-          className={`article premium ${styles.article}`}
-          data-premium-height={premiumHeight}
+          className={
+            isFreeControl
+              ? `article ${styles.article}`
+              : `article premium ${styles.article}`
+          }
+          data-premium-height={isFreeControl ? undefined : premiumHeight}
         >
           <h1 className={styles.title}>{articleHeadline}</h1>
           {/* Registration button moved below the image */}
@@ -211,8 +224,7 @@ function Article({ articleId }) {
             src={articleImageUrl}
             alt="Abstract illustration for the article"
             sizes="(max-width: 752px) 100vw, 688px"
-            eager
-            fetchPriority="high"
+            preload
             style={{ background: heroGradient }}
           />
           {registrationLink && (
@@ -312,10 +324,10 @@ function Article({ articleId }) {
             </Text>
           </Paper>
         </div>
-        <div className="axate-notice"></div>
+        {!isFreeControl && <div className="axate-notice"></div>}
 
         {/* Post-article engagement */}
-        <SocialShare articleUrl={articleOrigin} />
+        <SocialShare articleUrl={articleOrigin} title={articleHeadline} />
         <Comments />
       </main>
     </>

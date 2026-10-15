@@ -1,25 +1,35 @@
 name: Create and Sync Branches
-'on':
+
+on:
   push:
     branches:
       - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
 jobs:
   create-and-sync-branches:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Create Branches
+        uses: actions/checkout@v4
+        with:
+          # Full history so the publisher branches are available to check out.
+          fetch-depth: 0
+      - name: Configure git identity
         run: |
-          git branch mad
-          git branch rad
-      - name: Sync Branches with Master
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Sync branches with main
         run: |
-          git fetch origin
-          git checkout mad
-          git merge origin/main --no-edit
-          git push origin mad
-
-          git checkout rad
-          git merge origin/main --no-edit
-          git push origin rad
+          for branch in mad rad; do
+            if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+              git checkout "$branch"
+              git merge --no-edit origin/main
+            else
+              git checkout -b "$branch" origin/main
+            fi
+            git push origin "$branch"
+          done
