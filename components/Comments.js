@@ -70,18 +70,16 @@ function Comments() {
 
   return (
     <section className={styles.section}>
-      <Group gap="12px" mb="var(--mantine-spacing-xl)">
-        <Text component="h2" fw={700} size="lg" m={0}>
-          Comments ({MOCK_COMMENTS.length})
-        </Text>
-      </Group>
+      <Text component="h2" fw={600} size="md">
+        Comments ({MOCK_COMMENTS.length})
+      </Text>
 
       {/* Comment form */}
       <div className={styles.form}>
-        <Text c="dimmed" size="sm">
+        <Text c="dimmed" size="xs">
           Leave a comment
         </Text>
-        <div className={styles.formInputs}>
+        <div className={styles.formRow}>
           <input
             type="text"
             placeholder="Name (optional)"
@@ -94,13 +92,13 @@ function Comments() {
             className={styles.input}
             aria-label="Email"
           />
-          <textarea
-            placeholder="Write your comment..."
-            className={styles.textarea}
-            aria-label="Comment"
-            rows={3}
-          />
         </div>
+        <textarea
+          placeholder="Write your comment..."
+          className={styles.textarea}
+          aria-label="Comment"
+          rows={2}
+        />
         <button type="button" className={styles.submitButton}>
           Post Comment
         </button>
@@ -111,28 +109,28 @@ function Comments() {
         {MOCK_COMMENTS.map((comment) => (
           <article key={comment.id} className={styles.comment}>
             <header className={styles.commentHeader}>
-              <Group gap="8px" style={{ marginBottom: "0.5rem" }}>
+              <Group gap="6px">
                 {comment.avatarUrl && (
                   <Avatar
                     src={comment.avatarUrl}
                     alt=""
-                    size="sm"
-                    radius="md"
+                    size="xs"
+                    radius="sm"
                   />
                 )}
-                <div>
-                  <Text fw={600}>{comment.authorName}</Text>
-                  {comment.timestamp && (
-                    <Text c="dimmed" size="xs">
-                      {comment.timestamp}
-                      {comment.isEdited && " · Edited"}
-                    </Text>
-                  )}
-                </div>
+                <Text component="span" fw={600} size="xs">
+                  {comment.authorName}
+                </Text>
+                {comment.timestamp && (
+                  <Text component="span" c="dimmed" size="xs">
+                    {comment.timestamp}
+                    {comment.isEdited && " · Edited"}
+                  </Text>
+                )}
               </Group>
 
               <div className={styles.commentContent}>
-                <Text>{comment.content}</Text>
+                <Text size="sm">{comment.content}</Text>
               </div>
 
               <footer className={styles.commentFooter}>
@@ -162,32 +160,6 @@ function Comments() {
                 </Group>
               </footer>
             </header>
-
-            {/* Reply box */}
-            {comment.replies > 0 && (
-              <div className={styles.replyBox}>
-                <Text c="dimmed" size="xs" mb="var(--mantine-spacing-xs)">
-                  Write a reply
-                </Text>
-                <div className={styles.replyInputs}>
-                  <input
-                    type="text"
-                    placeholder="Name (optional)"
-                    className={styles.input}
-                    aria-label="Reply name"
-                  />
-                  <textarea
-                    placeholder="Write your reply..."
-                    className={styles.textarea}
-                    aria-label="Reply content"
-                    rows={2}
-                  />
-                </div>
-                <button type="button" className={styles.submitButton}>
-                  Reply
-                </button>
-              </div>
-            )}
           </article>
         ))}
       </div>

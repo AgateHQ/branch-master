@@ -182,7 +182,10 @@ identity, a thumbnail lead story, two featured cards, and a borderless story gri
 Cards stack with full-width images on phones; responsive image sizes follow
 those layouts.
 Article text and spacing scale with the viewport. Navigation and form controls
-have at least 44px touch targets, and keyboard users can skip to the main content.
+have at least 44px touch targets; the comment form and its reply/like/report
+actions are deliberately slimmer (about 34px fields, 28px text actions) but
+still clear the 24px WCAG 2.5.8 minimum. Keyboard users can skip to the main
+content.
 Motion respects the system reduced-motion preference. The wallet status appears
 in normal document flow so it does not cover reading or wallet controls.
 

@@ -13,6 +13,7 @@ const FEATURED_CARD_SIZES =
  * article cards and the Axate integration card share this component.
  */
 export default function ArticleCard({ article, preload = false }) {
+  const categoryClassName = article.editionTag ? styles.editionLabel : "";
   const className = [styles.card, article.isFeatured ? styles.featured : ""]
     .filter(Boolean)
     .join(" ");
@@ -41,7 +42,7 @@ export default function ArticleCard({ article, preload = false }) {
       />
       <div className={styles.body}>
         <div className={styles.eyebrow}>
-          <span>{article.category}</span>
+          <span className={categoryClassName}>{article.category}</span>
           {article.isFeatured && (
             <span className={styles.featuredLabel}>Featured</span>
           )}

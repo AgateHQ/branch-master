@@ -84,7 +84,7 @@ test("loads the unversioned staging wallet by default on KWR", async ({
 test("emits the KWR edition tag in the initial article HTML", async ({
   request,
 }) => {
-  for (const articleId of [2, 4]) {
+  for (const articleId of [2, 4, 8, 12, 18]) {
     const response = await request.get(`/articles/${articleId}`);
     expect(response.status()).toBe(200);
     expect(await response.text()).toContain(
@@ -95,6 +95,31 @@ test("emits the KWR edition tag in the initial article HTML", async ({
   const ordinaryArticle = await request.get("/articles/6");
   expect(ordinaryArticle.status()).toBe(200);
   expect(await ordinaryArticle.text()).not.toContain('property="article:tag"');
+});
+
+test("lists only Christmas articles from the Christmas menu item", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("link", { name: "Christmas edition" }).click();
+
+  await expect(page).toHaveURL(/\/christmas$/);
+  await expect(
+    page.getByRole("heading", { name: "Christmas 2026 edition" }),
+  ).toBeVisible();
+  await expect(page.getByRole("heading", { level: 3 })).toHaveCount(5);
+  await expect(page.getByRole("heading", { name: "Article #2" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Article #4" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Article #8" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Article #12" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Article #18" }),
+  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Article #3" })).toHaveCount(
+    0,
+  );
 });
 
 test("marks the free control article as accessible for free", async ({
@@ -220,6 +245,27 @@ test("shows comment actions for comments without replies", async ({ page }) => {
       name: "Report comment by Michael Park",
     }),
   ).toBeVisible();
+});
+
+test("keeps the comment controls at their documented size", async ({
+  page,
+}) => {
+  await page.goto("/articles/2");
+
+  const field = page.locator('input[aria-label="Name"]');
+  const action = page.getByRole("button", { name: "Like" }).first();
+
+  const fieldBox = await field.boundingBox();
+  const actionBox = await action.boundingBox();
+
+  // The comment block is deliberately slimmer than the site-wide 44px touch
+  // target documented in README, but must still clear the 24x24px WCAG 2.5.8
+  // target-size minimum on both axes ("Like" is the narrowest action).
+  expect(fieldBox.height).toBeGreaterThanOrEqual(24);
+  expect(fieldBox.height).toBeLessThanOrEqual(36);
+  expect(actionBox.width).toBeGreaterThanOrEqual(24);
+  expect(actionBox.height).toBeGreaterThanOrEqual(24);
+  expect(actionBox.height).toBeLessThanOrEqual(32);
 });
 
 test("validates and encrypts uploaded HTML", async ({ request }) => {

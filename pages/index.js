@@ -33,6 +33,7 @@ export default function Home() {
               Home
             </a>
             <a href="#latest-heading">Latest stories</a>
+            <a href="/christmas">Christmas edition</a>
             <a href={INTEGRATION_CARD.href}>Install Axate</a>
             <a href="/staticrypt">Encrypt HTML</a>
           </nav>

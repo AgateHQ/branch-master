@@ -48,3 +48,6 @@ test-results
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# agent tooling artifacts
+.openchamber

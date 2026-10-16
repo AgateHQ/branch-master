@@ -49,10 +49,10 @@ export const HERO_ARTICLE_ID = 1;
 // Ids that render as double-width cards in the index grid.
 export const FEATURED_ARTICLE_IDS = new Set([2]);
 
-// Two standard-placement articles share an edition tag so the KWR fixture can
-// prove that one purchase unlocks more than one article in the same edition.
+// Christmas articles share an edition tag so the KWR fixture can prove that
+// one purchase unlocks every article in the same edition.
 export const CHRISTMAS_EDITION_TAG = "christmas-2026";
-export const CHRISTMAS_EDITION_ARTICLE_IDS = new Set([2, 4]);
+export const CHRISTMAS_EDITION_ARTICLE_IDS = new Set([2, 4, 8, 12, 18]);
 
 // Article ids that stay free to read — the KWR control (see the README). They
 // render without a paywall so the structured data can honestly mark them
@@ -101,6 +101,10 @@ export const HERO_ARTICLE =
   ARTICLES.find((article) => article.isHero) ?? ARTICLES[0];
 
 export const GRID_ARTICLES = ARTICLES.filter((article) => !article.isHero);
+
+export const CHRISTMAS_EDITION_ARTICLES = ARTICLES.filter(
+  (article) => article.editionTag === CHRISTMAS_EDITION_TAG,
+);
 
 export const INTEGRATION_CARD = {
   href: "https://wallet.axate.io/install.html",
