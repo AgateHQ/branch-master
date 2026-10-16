@@ -6,8 +6,9 @@ import CoverImage from "../../components/CoverImage";
 import SocialShare from "../../components/SocialShare";
 import Comments from "../../components/Comments";
 import {
-  ARTICLES,
   AXATE_LOGO_SRC,
+  CHRISTMAS_EDITION_ARTICLE_IDS,
+  CHRISTMAS_EDITION_TAG,
   articleImageSrc,
   isFreeControlArticle,
 } from "../../data/articles";
@@ -59,10 +60,10 @@ function Article({ articleId, enableChristmasMagazine }) {
   const safeArticleId =
     Number.isFinite(articleId) && articleId > 0 ? articleId : 1;
   const isFreeControl = isFreeControlArticle(safeArticleId);
-  const editionTag = enableChristmasMagazine
-    ? (ARTICLES.find((article) => article.id === safeArticleId)?.editionTag ??
-      null)
-    : null;
+  const editionTag =
+    enableChristmasMagazine && CHRISTMAS_EDITION_ARTICLE_IDS.has(safeArticleId)
+      ? CHRISTMAS_EDITION_TAG
+      : null;
   const articleImageUrl = articleImageSrc(safeArticleId);
   const premiumHeight =
     PREMIUM_HEIGHTS[(safeArticleId - 1) % PREMIUM_HEIGHTS.length];

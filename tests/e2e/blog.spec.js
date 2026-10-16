@@ -103,8 +103,13 @@ test("emits Christmas Magazine tags only on CWH", async ({ request }) => {
       `http://${host}.localhost:3000/articles/2`,
     );
     expect(response.status()).toBe(200);
-    expect(await response.text()).not.toContain('property="article:tag"');
+    const html = await response.text();
+    expect(html).not.toContain('property="article:tag"');
+    expect(html).not.toContain("christmas-2026");
   }
+
+  const kwrIndex = await request.get("http://kwr.localhost:3000/");
+  expect(await kwrIndex.text()).not.toContain("christmas-2026");
 });
 
 test("lists Christmas Magazine articles only on CWH", async ({ page }) => {

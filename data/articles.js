@@ -81,19 +81,15 @@ export function articleImageSrc(id) {
 
 export const ARTICLES = Array.from({ length: ARTICLE_COUNT }, (_, index) => {
   const id = index + 1;
-  const editionTag = CHRISTMAS_EDITION_ARTICLE_IDS.has(id)
-    ? CHRISTMAS_EDITION_TAG
-    : null;
   return {
     id,
     href: `/articles/${id}`,
     title: `Article #${id}`,
-    category: editionTag ? "Christmas 2026 edition" : "Stories",
+    category: "Stories",
     blurb: KEATS_LINES[index % KEATS_LINES.length],
     image: articleImageSrc(id),
     isHero: id === HERO_ARTICLE_ID,
     isFeatured: FEATURED_ARTICLE_IDS.has(id),
-    editionTag,
   };
 });
 
@@ -102,9 +98,12 @@ export const HERO_ARTICLE =
 
 export const GRID_ARTICLES = ARTICLES.filter((article) => !article.isHero);
 
-export const CHRISTMAS_EDITION_ARTICLES = ARTICLES.filter(
-  (article) => article.editionTag === CHRISTMAS_EDITION_TAG,
-);
+export const CHRISTMAS_EDITION_ARTICLES = ARTICLES.filter((article) =>
+  CHRISTMAS_EDITION_ARTICLE_IDS.has(article.id),
+).map((article) => ({
+  ...article,
+  category: "Christmas Magazine",
+}));
 
 export const INTEGRATION_CARD = {
   href: "https://wallet.axate.io/install.html",
