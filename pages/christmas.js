@@ -3,6 +3,7 @@ import ArticleCard from "../components/ArticleCard";
 import SelectEnvironment from "../components/SelectEnvironment";
 import { CHRISTMAS_EDITION_ARTICLES, INTEGRATION_CARD } from "../data/articles";
 import styles from "../styles/Home.module.css";
+import { isCwhRequest } from "../lib/publicationHost";
 
 /**
  * Render the dedicated Christmas edition article listing.
@@ -13,7 +14,7 @@ export default function ChristmasEdition() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Christmas 2026 edition | Branch Master News</title>
+        <title>Christmas Magazine | CWH Branch Master</title>
         <link rel="icon" href="/favicon.ico" />
         <meta name="robots" content="noindex" />
       </Head>
@@ -24,7 +25,7 @@ export default function ChristmasEdition() {
             <a href="/">Home</a>
             <a href="/#latest-heading">Latest stories</a>
             <a href="/christmas" aria-current="page">
-              Christmas edition
+              Christmas Magazine
             </a>
             <a href={INTEGRATION_CARD.href}>Install Axate</a>
             <a href="/staticrypt">Encrypt HTML</a>
@@ -35,9 +36,9 @@ export default function ChristmasEdition() {
           </div>
         </div>
         <div className={`${styles.brand} ${styles.shell}`}>
-          <h1 className={styles.title}>Christmas 2026 edition</h1>
+          <h1 className={styles.title}>Christmas Magazine</h1>
           <p className={styles.tagline}>
-            Every story from this year&apos;s festive collection.
+            One purchase unlocks every story in the festive collection.
           </p>
         </div>
       </header>
@@ -49,7 +50,7 @@ export default function ChristmasEdition() {
       >
         <section className={styles.latest} aria-labelledby="edition-heading">
           <div className={styles.sectionHeading}>
-            <h2 id="edition-heading">Christmas edition stories</h2>
+            <h2 id="edition-heading">Christmas Magazine stories</h2>
             <span>{CHRISTMAS_EDITION_ARTICLES.length} articles</span>
           </div>
           <div className={styles.grid}>
@@ -65,4 +66,15 @@ export default function ChristmasEdition() {
       </main>
     </div>
   );
+}
+
+/**
+ * Make the Christmas Magazine listing available only on CWH.
+ *
+ * @param {Object} context Next.js request context.
+ * @param {import("http").IncomingMessage} context.req Incoming request.
+ * @returns {Promise<Object>} Page properties or a not-found response.
+ */
+export async function getServerSideProps({ req }) {
+  return isCwhRequest(req) ? { props: {} } : { notFound: true };
 }

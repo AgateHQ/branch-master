@@ -81,31 +81,39 @@ test("loads the unversioned staging wallet by default on KWR", async ({
   );
 });
 
-test("emits the KWR edition tag in the initial article HTML", async ({
-  request,
-}) => {
+test("emits Christmas Magazine tags only on CWH", async ({ request }) => {
   for (const articleId of [2, 4, 8, 12, 18]) {
-    const response = await request.get(`/articles/${articleId}`);
+    const response = await request.get(
+      `http://cwh.localhost:3000/articles/${articleId}`,
+    );
     expect(response.status()).toBe(200);
     expect(await response.text()).toContain(
       '<meta property="article:tag" content="christmas-2026"',
     );
   }
 
-  const ordinaryArticle = await request.get("/articles/6");
+  const ordinaryArticle = await request.get(
+    "http://cwh.localhost:3000/articles/6",
+  );
   expect(ordinaryArticle.status()).toBe(200);
   expect(await ordinaryArticle.text()).not.toContain('property="article:tag"');
+
+  for (const host of ["kwr", "rad"]) {
+    const response = await request.get(
+      `http://${host}.localhost:3000/articles/2`,
+    );
+    expect(response.status()).toBe(200);
+    expect(await response.text()).not.toContain('property="article:tag"');
+  }
 });
 
-test("lists only Christmas articles from the Christmas menu item", async ({
-  page,
-}) => {
-  await page.goto("/");
-  await page.getByRole("link", { name: "Christmas edition" }).click();
+test("lists Christmas Magazine articles only on CWH", async ({ page }) => {
+  await page.goto("http://cwh.localhost:3000/");
+  await page.getByRole("link", { name: "Christmas Magazine" }).click();
 
   await expect(page).toHaveURL(/\/christmas$/);
   await expect(
-    page.getByRole("heading", { name: "Christmas 2026 edition" }),
+    page.getByRole("heading", { name: "Christmas Magazine", exact: true }),
   ).toBeVisible();
   await expect(page.getByRole("heading", { level: 3 })).toHaveCount(5);
   await expect(page.getByRole("heading", { name: "Article #2" })).toBeVisible();
@@ -120,6 +128,13 @@ test("lists only Christmas articles from the Christmas menu item", async ({
   await expect(page.getByRole("heading", { name: "Article #3" })).toHaveCount(
     0,
   );
+
+  await page.goto("http://kwr.localhost:3000/");
+  await expect(
+    page.getByRole("link", { name: "Christmas Magazine" }),
+  ).toHaveCount(0);
+  const response = await page.goto("http://kwr.localhost:3000/christmas");
+  expect(response.status()).toBe(404);
 });
 
 test("marks the free control article as accessible for free", async ({

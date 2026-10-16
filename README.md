@@ -78,15 +78,15 @@ The Axate integration depends on the markup in `pages/_document.js` and the
 `.premium` and `.axate-notice` selectors used by article pages. See
 `pages/articles/[id].js` for the primary test scenario.
 
-### KWR Christmas edition test
+### CWH Christmas Magazine test
 
-On `kwr.branch-master.axate.io`, articles 2 and 4 both emit
+Only on `cwh.branch-master.axate.io`, articles 2, 4, 8, 12, and 18 emit
 `<meta property="article:tag" content="christmas-2026">` in the initial HTML.
-They use standard notice placement so you can accept the special edition
-purchase on article 2, then open article 4 to verify that the same edition is
-already unlocked. Article 6 has no edition tag and is the free KWR control: it
-renders without the `.premium` paywall and its `NewsArticle` JSON-LD reports
-`isAccessibleForFree: true`.
+They use standard notice placement so you can accept the separate Christmas
+Magazine purchase on one page, then open another tagged page to verify that all
+Christmas Magazine content is permanently unlocked. The `/christmas` listing
+and its navigation item are also restricted to CWH. Other subdomains, including
+KWR, receive neither the listing nor Christmas Magazine tags.
 
 Page links use native anchors and the random-article button uses
 `window.location.assign` to load a fresh document. This lets the Axate wallet

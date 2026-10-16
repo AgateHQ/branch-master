@@ -8,6 +8,7 @@ import {
   HERO_ARTICLE,
   INTEGRATION_CARD,
 } from "../data/articles";
+import { isCwhRequest } from "../lib/publicationHost";
 
 // Vercel exposes these at build time. Fall back to the commit SHA, and render
 // nothing at all when neither is available (e.g. a plain local build).
@@ -17,7 +18,7 @@ const VERSION_LABEL =
     ? process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA.slice(0, 7)
     : "");
 
-export default function Home() {
+export default function Home({ showChristmasMagazine }) {
   return (
     <div className={styles.container}>
       <Head>
@@ -33,7 +34,9 @@ export default function Home() {
               Home
             </a>
             <a href="#latest-heading">Latest stories</a>
-            <a href="/christmas">Christmas edition</a>
+            {showChristmasMagazine && (
+              <a href="/christmas">Christmas Magazine</a>
+            )}
             <a href={INTEGRATION_CARD.href}>Install Axate</a>
             <a href="/staticrypt">Encrypt HTML</a>
           </nav>
@@ -83,4 +86,15 @@ export default function Home() {
       </main>
     </div>
   );
+}
+
+/**
+ * Scope Christmas Magazine navigation to the CWH fixture.
+ *
+ * @param {Object} context Next.js request context.
+ * @param {import("http").IncomingMessage} context.req Incoming request.
+ * @returns {Promise<Object>} Host-specific page properties.
+ */
+export async function getServerSideProps({ req }) {
+  return { props: { showChristmasMagazine: isCwhRequest(req) } };
 }

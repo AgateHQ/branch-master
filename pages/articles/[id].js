@@ -12,6 +12,7 @@ import {
   isFreeControlArticle,
 } from "../../data/articles";
 import { useAxateEnvironment } from "../../components/AxateEnvironment";
+import { isCwhRequest } from "../../lib/publicationHost";
 
 const DEFAULT_SITE_ORIGIN = "https://branchmaster.news";
 const ARTICLE_DESCRIPTION =
@@ -42,7 +43,7 @@ function useBrowserUrl() {
   );
 }
 
-function Article({ articleId }) {
+function Article({ articleId, enableChristmasMagazine }) {
   // Start a fresh document so Axate initializes for the destination article.
   const goToRandomArticle = () => {
     const randomValues = new Uint32Array(1);
@@ -58,9 +59,10 @@ function Article({ articleId }) {
   const safeArticleId =
     Number.isFinite(articleId) && articleId > 0 ? articleId : 1;
   const isFreeControl = isFreeControlArticle(safeArticleId);
-  const editionTag =
-    ARTICLES.find((article) => article.id === safeArticleId)?.editionTag ??
-    null;
+  const editionTag = enableChristmasMagazine
+    ? (ARTICLES.find((article) => article.id === safeArticleId)?.editionTag ??
+      null)
+    : null;
   const articleImageUrl = articleImageSrc(safeArticleId);
   const premiumHeight =
     PREMIUM_HEIGHTS[(safeArticleId - 1) % PREMIUM_HEIGHTS.length];
@@ -334,12 +336,17 @@ function Article({ articleId }) {
   );
 }
 
-export function getServerSideProps({ params }) {
+export function getServerSideProps({ params, req }) {
   const requestedId = Number.parseInt(params?.id || "1", 10);
   const articleId =
     Number.isFinite(requestedId) && requestedId > 0 ? requestedId : 1;
 
-  return { props: { articleId } };
+  return {
+    props: {
+      articleId,
+      enableChristmasMagazine: isCwhRequest(req),
+    },
+  };
 }
 
 export default Article;

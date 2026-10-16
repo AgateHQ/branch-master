@@ -49,12 +49,12 @@ export const HERO_ARTICLE_ID = 1;
 // Ids that render as double-width cards in the index grid.
 export const FEATURED_ARTICLE_IDS = new Set([2]);
 
-// Christmas articles share an edition tag so the KWR fixture can prove that
-// one purchase unlocks every article in the same edition.
+// Christmas Magazine articles share a tag on the CWH fixture so one purchase
+// can unlock every tagged page.
 export const CHRISTMAS_EDITION_TAG = "christmas-2026";
 export const CHRISTMAS_EDITION_ARTICLE_IDS = new Set([2, 4, 8, 12, 18]);
 
-// Article ids that stay free to read — the KWR control (see the README). They
+// Article ids that stay free to read. They
 // render without a paywall so the structured data can honestly mark them
 // accessible for free, keeping the JSON-LD aligned with the `.premium` selector.
 export const FREE_CONTROL_ARTICLE_IDS = new Set([6]);
