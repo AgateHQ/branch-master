@@ -7,6 +7,7 @@ import {
   useAxateWallet,
   useAxateEnvironment,
 } from "../components/AxateEnvironment";
+import "../styles/tokens.css";
 import "../styles/globals.css";
 
 const theme = createTheme({});

@@ -8,6 +8,12 @@ running the site on different subdomains.
 This is a test fixture rather than a production publication. The site is
 marked `noindex`, and its article text and images are sample content.
 
+## Shared colours
+
+The demo bundles `styles/tokens.css` for its base surfaces and the decorative
+accent on the wallet status bar. To update it, replace the file with
+`tokens.css` from the desired [Axate design-token release](https://github.com/AgateHQ/design-tokens/releases).
+
 ## What it demonstrates
 
 - Loading the Axate wallet bundle in a Next.js app
